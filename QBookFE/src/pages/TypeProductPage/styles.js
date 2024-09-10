@@ -63,10 +63,10 @@ export const WrapperContent = styled.div`
 `;
 
 export const WrapperItemCategory = styled.span`
-  font-size: 1.4rem;
+  font-size: 1rem;
   font-weight: 500;
   line-height: 14px;
-  padding: 5px 0;
+  padding: 5px 4px;
   color: #38383d;
 `;
 

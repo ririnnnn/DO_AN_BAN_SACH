@@ -8,6 +8,10 @@ import LoadingComponent from "../../components/LoadingComponent/LoadingComponent
 import * as GenreService from "../../services/GenreService";
 import * as ProductService from "../../services/ProductService";
 import * as PublisherService from "../../services/PublisherService";
+
+import { Dropdown, Space } from "antd";
+import TypeProduct from "../../components/TypeProduct/TypeProduct";
+
 import {
   WrapperContent,
   WrapperFilter,
@@ -93,7 +97,14 @@ const TypeProductPage = () => {
   const onChange = (page) => {
     setPageValue(page);
   };
+  const items = genreProduct.map((item, index) => ({
+    key: `${index}`,
+    label: <TypeProduct type={item?.name} genre={item?._id} />,
+  }));
 
+  useEffect(() => {
+    fetchAllGenreProduct();
+  }, []);
   const renderContent = (type, option) => {
     switch (type) {
       case "text":
@@ -101,7 +112,12 @@ const TypeProductPage = () => {
           return (
             <WrapperItemCategory
               key={index}
-              style={{ cursor: "pointer" }}
+              style={{
+                cursor: "pointer",
+                background: genre == item?._id ? "#189eff" : "",
+                color: genre == item?._id ? "white" : "",
+              }}
+              className="rounded"
               onClick={() => {
                 handleDeleteAllFilter();
                 navigate(
@@ -306,133 +322,167 @@ const TypeProductPage = () => {
   };
 
   return (
-    <WrapperTypeProduct>
-      <div
-        style={{
-          width: "1285px",
-          minHeight: "calc(100vh - 90px)",
-          margin: "0 auto",
-        }}
-      >
-        <WrapperNavigation>
-          <WrapperNavigationHome onClick={() => navigate("/")}>
-            Trang chủ
-          </WrapperNavigationHome>
-          <span> -- Xem sản phẩm theo danh mục</span>
-        </WrapperNavigation>
-        <Row
-          style={{ flexWrap: "nowrap", paddingBottom: "20px", height: "100%" }}
-        >
-          <Col span={4}>
-            <WrapperNavbar>
-              <WrapperTitleText>Danh mục sách</WrapperTitleText>
-              <WrapperContent>
-                {renderContent("text", genreProduct)}
-              </WrapperContent>
-              <WrapperTitleText>Nhà xuất bản</WrapperTitleText>
-              <WrapperContent>
-                {renderContent("checkbox", dataCheckBoxPublisher)}
-              </WrapperContent>
-              <WrapperTitleText>Đánh giá</WrapperTitleText>
-              <WrapperContent>
-                {renderContent("rating", [5, 4, 3])}
-              </WrapperContent>
-            </WrapperNavbar>
-          </Col>
-          <Col span={20}>
-            <LoadingComponent isLoading={isLoading}>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  marginBottom: "10px",
-                }}
-              >
-                <ButtonComponent
-                  onClick={() => handleDeleteAllFilter()}
-                  buttonText="Xóa bộ lọc"
-                >
-                  Xóa tất cả
-                </ButtonComponent>
-                <WrapperPagination>
-                  <Pagination
-                    defaultCurrent={pageValue}
-                    total={totalProduct}
-                    pageSize={10}
-                    onChange={onChange}
-                    style={{ textAlign: "center", marginTop: "20px" }}
-                  />
-                  <Select
-                    defaultValue="asc"
-                    style={{
-                      width: 160,
-                    }}
-                    onChange={handleChange}
-                    options={[
-                      {
-                        value: "asc",
-                        label: "Giá thấp đến cao",
-                      },
-                      {
-                        value: "desc",
-                        label: "Giá cao đến thấp",
-                      },
-                    ]}
-                  />
-                </WrapperPagination>
-              </div>
-              <WrapperFilter>
-                {!!selectedFilter.length &&
-                  selectedFilter.map((item, index) => (
-                    <WrapperItemFilter key={index}>
-                      <div>{item.name}</div>
-                      <div
-                        style={{ cursor: "pointer" }}
-                        // Logic xóa theo từng filter
-                        onClick={() => {
-                          // Giúp gọi lại API trong useEffect
-                          setSelectedValues((prevValues) =>
-                            prevValues.filter(
-                              (itemValue) => itemValue !== item.value
-                            )
-                          );
-                          // Giúp render lại các nhãn filter
-                          setSelectedFilter((prevFilter) =>
-                            prevFilter.filter(
-                              (itemFilter) => itemFilter.value !== item.value
-                            )
-                          );
-                          setRatingValue("");
-                        }}
-                      >
-                        <CloseCircleFilled style={{ fontSize: "1.4rem" }} />
-                      </div>
-                    </WrapperItemFilter>
-                  ))}
-              </WrapperFilter>
-              <WrapperProducts>
-                {productGenre.map((product, index) => (
-                  <CardProduct
-                    key={product._id}
-                    name={product.name}
-                    price={product.price}
-                    image={product.image}
-                    rating={product.averageRating}
-                    description={product.description}
-                    countInStock={product.countInStock}
-                    type={product.type}
-                    discount={product.discount}
-                    selled={product.selled}
-                    id={product._id}
-                  />
-                ))}
-              </WrapperProducts>
-            </LoadingComponent>
-          </Col>
-        </Row>
+    <>
+      <div className="flex justify-center">
+        <div className="w-[1285px] flex items-center gap-[10px] overflow-x-auto whitespace-nowrap">
+          <Dropdown
+            menu={{
+              items,
+            }}
+            className="text-base p-3 cursor-pointer hover:bg-[#189eff] hover:text-white transition"
+          >
+            <Space>Danh Mục Sản Phẩm</Space>
+          </Dropdown>
+          <div
+            className="text-base p-3 cursor-pointer hover:bg-[#189eff] hover:text-white transition"
+            onClick={() => navigate("/intro")}
+          >
+            Giới thiệu
+          </div>
+          <div
+            className="text-base p-3 cursor-pointer hover:bg-[#189eff] hover:text-white transition"
+            onClick={() => navigate("/news")}
+          >
+            Tin tức
+          </div>
+          <div
+            className="text-base p-3 cursor-pointer hover:bg-[#189eff] hover:text-white transition"
+            onClick={() => navigate("/contact")}
+          >
+            Liên hệ
+          </div>
+        </div>
       </div>
-    </WrapperTypeProduct>
+      <WrapperTypeProduct>
+        <div
+          style={{
+            width: "1285px",
+            minHeight: "calc(100vh - 90px)",
+            margin: "0 auto",
+            padding: "12px 0px",
+          }}
+        >
+          {/* <WrapperNavigation>
+            <span>Xem sản phẩm theo danh mục</span>
+          </WrapperNavigation> */}
+          <Row
+            style={{
+              flexWrap: "nowrap",
+              paddingBottom: "20px",
+              height: "100%",
+            }}
+          >
+            <Col span={4}>
+              <WrapperNavbar className="rounded-lg border border-stone-400">
+                <WrapperTitleText>Danh mục sách</WrapperTitleText>
+                <WrapperContent>
+                  {renderContent("text", genreProduct)}
+                </WrapperContent>
+                <WrapperTitleText>Nhà xuất bản</WrapperTitleText>
+                <WrapperContent>
+                  {renderContent("checkbox", dataCheckBoxPublisher)}
+                </WrapperContent>
+                <WrapperTitleText>Đánh giá</WrapperTitleText>
+                <WrapperContent>
+                  {renderContent("rating", [5, 4, 3])}
+                </WrapperContent>
+              </WrapperNavbar>
+            </Col>
+            <Col span={20}>
+              <LoadingComponent isLoading={isLoading}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <ButtonComponent
+                    onClick={() => handleDeleteAllFilter()}
+                    buttonText="Xóa bộ lọc"
+                  >
+                    Xóa tất cả
+                  </ButtonComponent>
+                  <WrapperPagination>
+                    <Pagination
+                      defaultCurrent={pageValue}
+                      total={totalProduct}
+                      pageSize={10}
+                      onChange={onChange}
+                      style={{ textAlign: "center", marginTop: "20px" }}
+                    />
+                    <Select
+                      defaultValue="asc"
+                      style={{
+                        width: 160,
+                      }}
+                      onChange={handleChange}
+                      options={[
+                        {
+                          value: "asc",
+                          label: "Giá thấp đến cao",
+                        },
+                        {
+                          value: "desc",
+                          label: "Giá cao đến thấp",
+                        },
+                      ]}
+                    />
+                  </WrapperPagination>
+                </div>
+                <WrapperFilter>
+                  {!!selectedFilter.length &&
+                    selectedFilter.map((item, index) => (
+                      <WrapperItemFilter key={index}>
+                        <div>{item.name}</div>
+                        <div
+                          style={{ cursor: "pointer" }}
+                          // Logic xóa theo từng filter
+                          onClick={() => {
+                            // Giúp gọi lại API trong useEffect
+                            setSelectedValues((prevValues) =>
+                              prevValues.filter(
+                                (itemValue) => itemValue !== item.value
+                              )
+                            );
+                            // Giúp render lại các nhãn filter
+                            setSelectedFilter((prevFilter) =>
+                              prevFilter.filter(
+                                (itemFilter) => itemFilter.value !== item.value
+                              )
+                            );
+                            setRatingValue("");
+                          }}
+                        >
+                          <CloseCircleFilled style={{ fontSize: "1.4rem" }} />
+                        </div>
+                      </WrapperItemFilter>
+                    ))}
+                </WrapperFilter>
+                <WrapperProducts>
+                  {productGenre.map((product, index) => (
+                    <CardProduct
+                      key={product._id}
+                      name={product.name}
+                      price={product.price}
+                      image={product.image}
+                      rating={product.averageRating}
+                      description={product.description}
+                      countInStock={product.countInStock}
+                      type={product.type}
+                      discount={product.discount}
+                      selled={product.selled}
+                      id={product._id}
+                    />
+                  ))}
+                </WrapperProducts>
+              </LoadingComponent>
+            </Col>
+          </Row>
+        </div>
+      </WrapperTypeProduct>
+    </>
   );
 };
 

@@ -13,7 +13,6 @@ router.get(
   authMiddleware,
   ProductController.getCountProduct
 );
-
 router.post(
   "/delete-many",
   authMiddleware,

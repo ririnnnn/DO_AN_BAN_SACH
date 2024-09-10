@@ -374,9 +374,12 @@ const AdminAuthor = () => {
   return (
     <div>
       <WrapperHeader>Quản lý tác giả</WrapperHeader>
-      <WrapperButton type="dashed" onClick={showModal}>
-        Thêm <PlusOutlined />
-      </WrapperButton>
+      <button
+        className="bg-green-300 rounded py-[10px] px-5 font-bold"
+        onClick={showModal}
+      >
+        Thêm
+      </button>
 
       <ModalComponent
         title="Tạo tác giả mới"

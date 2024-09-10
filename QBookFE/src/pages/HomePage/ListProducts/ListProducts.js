@@ -98,13 +98,13 @@ function ListProducts(props) {
           ))}
         </div>
         <div
-          className="w-10 h-10 rounded-[50%] absolute top-[50%] left-[-20px] translate-y-[-30px] bg-[#189eff] text-white text-center leading-[34px] cursor-pointer hover:bg-[#74b9ff] hover:transition"
+          className="w-10 h-10 rounded flex items-center justify-center absolute top-[50%] left-[-20px] translate-y-[-30px] bg-stone-200  text-black text-center leading-[34px] cursor-pointer hover:bg-[#74b9ff] hover:transition hover:text-white"
           onClick={handleScrollLeft}
         >
           <LeftOutlined />
         </div>
         <div
-          className="w-10 h-10 rounded-[50%] absolute top-[50%] right-[-20px] translate-y-[-30px] bg-[#189eff] text-white text-center leading-[34px] cursor-pointer hover:bg-[#74b9ff] hover:transition"
+          className="w-10 h-10 rounded flex items-center justify-center absolute top-[50%] right-[-20px] translate-y-[-30px] bg-stone-200  text-black text-center leading-[34px] cursor-pointer hover:bg-[#74b9ff] hover:transition hover:text-white"
           onClick={handleScrollRight}
         >
           <RightOutlined />

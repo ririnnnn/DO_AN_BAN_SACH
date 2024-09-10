@@ -1,8 +1,4 @@
-import {
-  DeleteOutlined,
-  EditOutlined,
-  PlusOutlined
-} from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { Button, Form } from "antd";
@@ -320,9 +316,12 @@ const AdminNews = () => {
   return (
     <div>
       <WrapperHeader>Quản lý tin tức</WrapperHeader>
-      <WrapperButton type="dashed" onClick={showModal}>
-        Thêm <PlusOutlined />
-      </WrapperButton>
+      <button
+        className="bg-green-300 rounded py-[10px] px-5 font-bold"
+        onClick={showModal}
+      >
+        Thêm
+      </button>
 
       <ModalComponent
         title="Tạo tin tức mới"

@@ -2,14 +2,38 @@ const BannerService = require("../services/BannerService");
 
 const createBanner = async (req, res) => {
   try {
-    const { title, image, description } = req.body;
-    if (!title || !image || !description) {
+    const { desc, activeFrom, activeTo, image } = req.body;
+    if (!desc || !activeFrom || !activeTo || !image) {
       return res.status(400).json({
         status: "ERROR",
         message: "Title, image, and description are required!",
       });
     }
     const response = await BannerService.createBanner(req.body);
+    return res.status(200).json(response);
+  } catch (e) {
+    return res.status(500).json({
+      message: e,
+    });
+  }
+};
+
+const getBannerDisplay = async (req, res) => {
+  try {
+    const limit = req.query.limit;
+    if (!limit) {
+      return res.status(400).json({
+        status: "ERROR",
+        message: "limit are required!",
+      });
+    }
+    if (limit < 1) {
+      return res.status(400).json({
+        status: "ERROR",
+        message: "limit are must be more than 0!",
+      });
+    }
+    const response = await BannerService.getBannerDisplay(limit);
     return res.status(200).json(response);
   } catch (e) {
     return res.status(500).json({
@@ -33,6 +57,20 @@ const getBannerById = async (req, res) => {
     return res.status(200).json(response);
   } catch (e) {
     return res.status(500).json({
+      message: e,
+    });
+  }
+};
+const getBanner = async (req, res) => {
+  try {
+    const { page, limit } = req.query;
+    const response = await BannerService.getBanner(
+      Number(page) || 1,
+      Number(limit) || 10
+    );
+    res.status(200).json(response);
+  } catch (e) {
+    res.status(404).json({
       message: e,
     });
   }
@@ -62,7 +100,7 @@ const updateBanner = async (req, res) => {
 const deleteBanner = async (req, res) => {
   try {
     const bannerId = req.params.id;
-
+    console.log(bannerId);
     if (!bannerId) {
       return res.status(400).json({
         status: "ERROR",
@@ -84,4 +122,6 @@ module.exports = {
   getBannerById,
   updateBanner,
   deleteBanner,
+  getBannerDisplay,
+  getBanner,
 };

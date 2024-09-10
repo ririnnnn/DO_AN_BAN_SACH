@@ -35,7 +35,9 @@ const PaymentPage = () => {
   const [checkedList, setCheckedList] = useState([]);
   const [isOpenModalUpdateInfo, setIsOpenModalUpdateInfo] = useState(false);
   const [deliveryMethod, setDeliveryMethod] = useState("GHTK");
-  const [paymentMethod, setPaymentMethod] = useState("Thanh toán khi nhận hàng");
+  const [paymentMethod, setPaymentMethod] = useState(
+    "Thanh toán khi nhận hàng"
+  );
   const [stateUserDetail, setStateUserDetail] = useState({
     name: "",
     phone: "",
@@ -250,17 +252,18 @@ const PaymentPage = () => {
                     >
                       <WrapperRadioContent>
                         <Radio value={`GHTK`}>
-                          <WrapperRadioText>GHTK</WrapperRadioText> Giao hàng tiết
-                          kiệm
+                          <WrapperRadioText>GHTK</WrapperRadioText> Giao hàng
+                          tiết kiệm
                         </Radio>
-                        <Radio value={`J&T Express`}>
-                          <WrapperRadioText>J&T Express</WrapperRadioText> J&T Express
+                        <Radio value={`GHN`}>
+                          <WrapperRadioText>GHN</WrapperRadioText> Giao hàng
+                          nhanh
                         </Radio>
                       </WrapperRadioContent>
                     </Radio.Group>
                   </WrapperMethodDelivery>
                 </div>
-  
+
                 <div style={{ padding: "20px 10px" }}>
                   <span style={{ fontSize: "1.5rem", fontWeight: 500 }}>
                     Chọn hình thức thanh toán
@@ -275,8 +278,8 @@ const PaymentPage = () => {
                         <Radio value={"Thanh toán khi nhận hàng"}>
                           Thanh toán khi nhận hàng
                         </Radio>
-                        <Radio value={"Thanh toán bằng Paypal"}>
-                          Thanh toán bằng Paypal
+                        <Radio value={"Thanh toán bằng VNPAY"}>
+                          Thanh toán bằng VNPAY
                         </Radio>
                       </WrapperRadioContent>
                     </Radio.Group>
@@ -284,7 +287,7 @@ const PaymentPage = () => {
                 </div>
               </WrapperLeft>
             </div>
-  
+
             <div>
               <WrapperRight>
                 <div>
@@ -299,7 +302,7 @@ const PaymentPage = () => {
                     Thay đổi
                   </span>
                 </div>
-  
+
                 <div style={{ padding: "20px 0 30px" }}>
                   <WrapperCaculator>
                     <label>Tạm tính</label>
@@ -314,7 +317,7 @@ const PaymentPage = () => {
                     <div>{`${convertPrice(priceDeliveryMemo) || 0} VND`}</div>
                   </WrapperCaculator>
                 </div>
-  
+
                 <WrapperTotalPrice>
                   <span>Tổng tiền</span>
                   <div>
@@ -326,22 +329,17 @@ const PaymentPage = () => {
                 </WrapperTotalPrice>
               </WrapperRight>
               <div style={{ paddingTop: "30px" }}>
-                {paymentMethod === "Thanh toán bằng Paypal" ? (
-                  <PayPalButton
-                    amount={Math.ceil(priceTotalMemo / 24000)}
-                    // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
-                    onSuccess={(details, data) => onSuccessPaypal(details, data)}
-                    onError={() => {
-                      alert("Payment error!");
-                    }}
-                  />
+                {paymentMethod === "Thanh toán bằng VNPAY" ? (
+                  <button className="w-full bg-blue-500 rounded h-12 font-bold text-[15px] text-red-600">
+                    Thanh toán VNPAY
+                  </button>
                 ) : (
                   <ButtonComponent
                     buttonText="Đặt hàng"
                     onClick={handleBuyProduct}
                     styleButton={{
                       backgroundColor: "rgb(255, 66, 78)",
-                      width: "350px",
+                      width: "100%",
                       height: "48px",
                       border: "none",
                     }}
@@ -356,7 +354,7 @@ const PaymentPage = () => {
             </div>
           </div>
         </WrapperOrderPage>
-  
+
         <ModalComponent
           title="Cập nhật thông tin giao hàng"
           open={isOpenModalUpdateInfo}
@@ -397,7 +395,7 @@ const PaymentPage = () => {
                 name="name"
               />
             </Form.Item>
-  
+
             <Form.Item
               label="Phone"
               name="phone"
@@ -414,7 +412,7 @@ const PaymentPage = () => {
                 name="phone"
               />
             </Form.Item>
-  
+
             <Form.Item
               label="Address"
               name="address"
@@ -431,7 +429,7 @@ const PaymentPage = () => {
                 name="address"
               />
             </Form.Item>
-  
+
             <Form.Item
               label="City"
               name="city"
@@ -448,7 +446,7 @@ const PaymentPage = () => {
                 name="city"
               />
             </Form.Item>
-  
+
             <Form.Item
               wrapperCol={{
                 offset: 20,

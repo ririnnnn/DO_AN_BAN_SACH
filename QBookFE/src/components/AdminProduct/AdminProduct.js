@@ -650,9 +650,12 @@ const AdminProduct = () => {
   return (
     <div>
       <WrapperHeader>Quản lý sản phẩm</WrapperHeader>
-      <WrapperButton type="dashed" onClick={showModal}>
-        Thêm <PlusOutlined />
-      </WrapperButton>
+      <button
+        className="bg-green-300 rounded py-[10px] px-5 font-bold"
+        onClick={showModal}
+      >
+        Thêm
+      </button>
 
       <ModalComponent
         title="Tạo sản phẩm mới"

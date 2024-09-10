@@ -91,7 +91,7 @@ function ProductSearchPage() {
           style={{ flexWrap: "nowrap", paddingBottom: "20px", height: "100vh" }}
         >
           <Col span={4}>
-            <WrapperNavbar>
+            <WrapperNavbar className="rounded-lg border border-stone-400">
               <WrapperTitleText>Danh mục sách</WrapperTitleText>
               <WrapperContent>
                 {renderContent("text", genreProduct)}

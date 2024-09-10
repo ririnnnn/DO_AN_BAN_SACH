@@ -396,9 +396,12 @@ const AdminContact = () => {
   return (
     <div>
       <WrapperHeader>Quản lý liên hệ</WrapperHeader>
-      <WrapperButton type="dashed" onClick={showModal}>
-        Thêm <PlusOutlined />
-      </WrapperButton>
+      <button
+        className="bg-green-300 rounded py-[10px] px-5 font-bold"
+        onClick={showModal}
+      >
+        Thêm
+      </button>
 
       <ModalComponent
         title="Tạo liên hệ mới"

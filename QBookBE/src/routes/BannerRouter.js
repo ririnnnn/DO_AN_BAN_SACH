@@ -3,17 +3,17 @@ const router = express.Router();
 const BannerController = require("../controllers/BannerController");
 const { isAuthorized } = require("../middleware/authMiddleware");
 
+router.route("/display").get(BannerController.getBannerDisplay);
 router
   .route("")
-  .get(isAuthorized, BannerController.getBannerById)
-  .post(BannerController.createBanner);
-
+  .get(BannerController.getBanner)
+  .post(isAuthorized, BannerController.createBanner);
 router
   .route("/:id")
   .get(BannerController.getBannerById)
-  .put(BannerController.updateBanner)
-  .delete(BannerController.deleteBanner);
+  .put(isAuthorized, BannerController.updateBanner)
+  .delete(isAuthorized, BannerController.deleteBanner);
 
-//router.route("/delete-many").post(NewController.deleteManyNew);
+router.route("/delete-many").post(BannerController.deleteBanner);
 
 module.exports = router;

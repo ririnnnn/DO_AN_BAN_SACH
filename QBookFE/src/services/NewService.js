@@ -14,12 +14,14 @@ export const getNew = async (page, limit) => {
 };
 
 export const getDetailNew = async (newId) => {
-  const res = await axios.get(`${process.env.REACT_APP_API}/new/${newId}`);
+  const res = await authorizedAxiosInstance.get(
+    `${process.env.REACT_APP_API}/new/${newId}`
+  );
   return res.data;
 };
 
 export const updateNew = async (newId, data) => {
-  const res = await axios.put(
+  const res = await authorizedAxiosInstance.put(
     `${process.env.REACT_APP_API}/new/${newId}`,
     data
   );
@@ -27,12 +29,14 @@ export const updateNew = async (newId, data) => {
 };
 
 export const deleteNew = async (newId) => {
-  const res = await axios.delete(`${process.env.REACT_APP_API}/new/${newId}`);
+  const res = await authorizedAxiosInstance.delete(
+    `${process.env.REACT_APP_API}/new/${newId}`
+  );
   return res.data;
 };
 
 export const deleteManyNew = async (newIds) => {
-  const res = await axios.post(
+  const res = await authorizedAxiosInstance.post(
     `${process.env.REACT_APP_API}/new/delete-many`,
     newIds
   );

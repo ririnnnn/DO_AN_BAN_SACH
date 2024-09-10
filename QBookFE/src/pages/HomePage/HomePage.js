@@ -3,9 +3,9 @@ import { Dropdown, Space } from "antd";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import slider1 from "../../assets/images/slider1.webp";
-import slider2 from "../../assets/images/slider2.webp";
-import slider3 from "../../assets/images/slider3.webp";
+import slider1 from "../../assets/images/banner1.jpg";
+import slider2 from "../../assets/images/banner2.jpg";
+import slider3 from "../../assets/images/banner3.jpg";
 import CardProduct from "../../components/CardProduct/CardProduct";
 import LoadingComponent from "../../components/LoadingComponent/LoadingComponent";
 import SliderComponent from "../../components/SliderComponent/SliderComponent";
@@ -154,7 +154,7 @@ const HomePage = () => {
           <LoadingComponent isLoading={isLoading}>
             <div className="hidden lg:block">
               <h2 className="mt-5 text-center text-lg font-semibold">
-                TẤT CẢ SÁCH
+                Sách mới
               </h2>
               <WrapperProducts>
                 {products?.data
@@ -179,7 +179,7 @@ const HomePage = () => {
                     />
                   ))}
               </WrapperProducts>
-              <div className="text-center">
+              {/* <div className="text-center">
                 <WrapperButtonComponent
                   buttonText={"Xem thêm"}
                   disabled={
@@ -188,7 +188,7 @@ const HomePage = () => {
                   }
                   onClick={handleLoadMore}
                 />
-              </div>
+              </div> */}
             </div>
           </LoadingComponent>
 
@@ -197,7 +197,7 @@ const HomePage = () => {
             title="SÁCH BÁN CHẠY"
             isLoading={isLoadingBookBestSeller}
           />
-          <ListProducts
+          {/* <ListProducts
             products={productVN}
             title="SÁCH VĂN HỌC VIỆT NAM"
             isLoading={isLoadingBookVanHocVietNam}
@@ -211,7 +211,7 @@ const HomePage = () => {
             products={productMangaComic}
             title="MANGA - COMIC"
             isLoading={isLoadingBookMangaComic}
-          />
+          /> */}
         </div>
       </div>
     </>

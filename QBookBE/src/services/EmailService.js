@@ -41,7 +41,7 @@ const sendEmailCreateOrder = async (email, newOrder) => {
       </p>
       <p>Chi tiết đơn hàng:</p>
       ${listItems}
-      <p>Quý khách có thể kiểm tra tình trạng đơn hàng và theo dõi lộ trình giao hàng qua tài khoản của mình trên website của chúng tôi. Nếu có bất kỳ thắc mắc hoặc cần hỗ trợ thêm, vui lòng liên hệ với chúng tôi qua <a href="mailto:kuroko3105@gmail.com">kuroko3105@gmail.com</a>.</p>
+      <p>Quý khách có thể kiểm tra tình trạng đơn hàng và theo dõi lộ trình giao hàng qua tài khoản của mình trên website của chúng tôi. Nếu có bất kỳ thắc mắc hoặc cần hỗ trợ thêm, vui lòng liên hệ với chúng tôi qua <a href="mailto:quangnguyenx15@gmail.com">quangnguyenx15@gmail.com</a>.</p>
       <p>Chúng tôi hy vọng quý khách sẽ có những trải nghiệm thú vị với cuốn sách đã chọn.</p>
       <p>Trân trọng,<br>
       [Đội Ngũ Hỗ Trợ Khách Hàng]<br>
@@ -72,7 +72,7 @@ const sendEmailDeleteOrder = async (email, order) => {
     <div>
       <p>Chào <strong>${order?.shippingAddress?.fullName}</strong>,</p>
       <p>
-        Chúng tôi xin thông báo rằng đơn hàng của bạn với mã số <strong>DH${order?._id}</strong> đã được hủy thành công. Nếu bạn có bất kỳ thắc mắc hoặc cần hỗ trợ thêm, xin vui lòng liên hệ với chúng tôi qua <a href="mailto:kuroko3105@gmail.com">kuroko3105@gmail.com</a>.
+        Chúng tôi xin thông báo rằng đơn hàng của bạn với mã số <strong>DH${order?._id}</strong> đã được hủy thành công. Nếu bạn có bất kỳ thắc mắc hoặc cần hỗ trợ thêm, xin vui lòng liên hệ với chúng tôi qua <a href="mailto:quangnguyenx15@gmail.com">quangnguyenx15@gmail.com</a>.
       </p>
       <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>
       <p>Trân trọng,<br>

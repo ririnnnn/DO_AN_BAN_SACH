@@ -8,6 +8,7 @@ const ContactRouter = require("./ContactRouter");
 const AuthorRouter = require("./AuthorRouter");
 const NewRouter = require("./NewRouter");
 const BannerRouter = require("./BannerRouter");
+const StatisticRouter = require("./StatisticRouter");
 
 const routes = (app) => {
   app.use("/api/user", UserRouter);
@@ -20,6 +21,7 @@ const routes = (app) => {
   app.use("/api/author", AuthorRouter);
   app.use("/api/new", NewRouter);
   app.use("/api/banner", BannerRouter);
+  app.use("/api/statistic", StatisticRouter);
 };
 
 module.exports = routes;

@@ -8,6 +8,8 @@ import {
   PhoneOutlined,
   TeamOutlined,
   ReadOutlined,
+  AreaChartOutlined,
+  BoxPlotOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import React, { useEffect, useState } from "react";
@@ -23,6 +25,7 @@ import { WrapperContent } from "./styles";
 import AdminContact from "../../components/AdminContact/AdminContact";
 import AdminAuthor from "../../components/AdminAuthor/AdminAuthor";
 import AdminNews from "../../components/AdminNews/AdminNews";
+import AdminBanner from "../../components/AdminBanner/AdminBanner";
 
 const AdminPage = () => {
   const renderKey = (key) => {
@@ -45,12 +48,14 @@ const AdminPage = () => {
         return <AdminNews />;
       case "contact":
         return <AdminContact />;
+      case "banner":
+        return <AdminBanner />;
       default:
         return <></>;
     }
   };
   const items = [
-    getItem("Trang chủ", "home", <HomeOutlined />),
+    getItem("Thống kê", "home", <AreaChartOutlined />),
     getItem("Người dùng", "user", <UserOutlined />),
     getItem("Sản phẩm", "product", <AppstoreOutlined />),
     getItem("Đơn hàng", "order", <ShoppingCartOutlined />),
@@ -59,6 +64,7 @@ const AdminPage = () => {
     getItem("Thể loại", "genre", <AccountBookOutlined />),
     getItem("Tin tức", "news", <ReadOutlined />),
     getItem("Liên hệ", "contact", <PhoneOutlined />),
+    getItem("Banner", "banner", <BoxPlotOutlined />),
   ];
   const [keySelected, setKeySelected] = useState("home");
 

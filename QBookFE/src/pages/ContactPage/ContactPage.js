@@ -12,6 +12,9 @@ import LoadingComponent from "../../components/LoadingComponent/LoadingComponent
 import * as Message from "../../components/Message/Message";
 import useMutationHook from "../../hooks/useMutationHook";
 import * as ContactService from "../../services/ContactService";
+import { Pagination, Dropdown, Space } from "antd";
+import TypeProduct from "../../components/TypeProduct/TypeProduct";
+import * as GenreService from "../../services/GenreService";
 import {
   WrapperContact,
   WrapperContactForm,
@@ -64,28 +67,66 @@ function ContactPage() {
     }
   };
 
-  return (
-    <div className="bg-[#f5f5fa]">
-      <div className="w-[1285px] h-[100%] mx-auto my-0">
-        <div className="text-base py-4">
-          <span
-            className="font-semibold cursor-pointer"
-            onClick={() => navigate("/")}
-          >
-            Trang chủ
-          </span>
-          <span> / Liên hệ</span>
-        </div>
+  const [genreProduct, setGenreProduct] = useState([]);
+  const items = genreProduct.map((item, index) => ({
+    key: `${index}`,
+    label: <TypeProduct type={item?.name} genre={item?._id} />,
+  }));
+  const fetchAllGenreProduct = async () => {
+    const res = await GenreService.getAllGenre();
+    setGenreProduct(res?.data);
+  };
+  useEffect(() => {
+    fetchAllGenreProduct();
+  }, []);
 
-        <div>
-          <div className="flex justify-between gap-5 pb-5">
+  return (
+    <>
+      <div className="flex justify-center">
+        <div className="w-[1285px] flex items-center gap-[10px] overflow-x-auto whitespace-nowrap">
+          <Dropdown
+            menu={{
+              items,
+            }}
+            className="text-base p-3 cursor-pointer hover:bg-[#189eff] hover:text-white transition"
+          >
+            <Space>Danh Mục Sản Phẩm</Space>
+          </Dropdown>
+          <div
+            className="text-base p-3 cursor-pointer hover:bg-[#189eff] hover:text-white transition"
+            onClick={() => navigate("/intro")}
+          >
+            Giới thiệu
+          </div>
+          <div
+            className="text-base p-3 cursor-pointer hover:bg-[#189eff] hover:text-white transition"
+            onClick={() => navigate("/news")}
+          >
+            Tin tức
+          </div>
+          <div
+            className="text-base p-3 cursor-pointer hover:bg-[#189eff] hover:text-white transition"
+            onClick={() => navigate("/contact")}
+          >
+            Liên hệ
+          </div>
+        </div>
+      </div>
+      <div className="bg-[#f5f5fa]">
+        <div className="w-[1285px] h-[100%] mx-auto my-0">
+          <div className="text-base py-4">
+            <span className="font-bold">Liên hệ</span>
+          </div>
+
+          <div>
+            {/* <div className="flex justify-between gap-5 pb-5">
             <div className="flex w-[410px] bg-white p-3 rounded-lg">
               <div className="w-10 h-10 leading-[34px] bg-[#228b22] rounded-[50%] text-center text-white">
                 <EnvironmentOutlined />
               </div>
               <div className="w-calc-100-minus-40 pl-3 text-base">
                 <div className="font-semibold">Địa chỉ:</div>
-                <div>Hải Trung, Hải Hậu, Nam Định</div>
+                <div>Cầu giấy, Hà Nội, Nghệ An </div>
               </div>
             </div>
 
@@ -95,7 +136,7 @@ function ContactPage() {
               </div>
               <div className="w-calc-100-minus-40 pl-3 text-base">
                 <div className="font-semibold">Gửi thắc mắc:</div>
-                <div>trantung310502@gmail.com</div>
+                <div>quangnguyenx15@gmail.com</div>
               </div>
             </div>
 
@@ -105,96 +146,98 @@ function ContactPage() {
               </div>
               <div className="w-calc-100-minus-40 pl-3 text-base">
                 <div className="font-semibold">Điện thoại:</div>
-                <div>0369554336</div>
+                <div>0391234567</div>
               </div>
             </div>
-          </div>
+          </div> */}
 
-          <LoadingComponent isLoading={isLoadingCreate}>
-            <WrapperContactForm>
-              <Form
-                name="basic"
-                initialValues={{
-                  remember: true,
-                }}
-                onFinish={() => onFinish()}
-                onFinishFailed={() => {}}
-                autoComplete="off"
-                form={form}
-              >
-                <Form.Item
-                  label="Họ và tên"
-                  name="userName"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vui lòng nhập họ và tên!",
-                    },
-                  ]}
-                >
-                  <Input onChange={(e) => setUserName(e.target.value)} />
-                </Form.Item>
-
-                <Form.Item
-                  label="Email"
-                  name="email"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vui lòng nhập email!",
-                    },
-                  ]}
-                >
-                  <Input
-                    onChange={(e) => setEmail(e.target.value)}
-                    type="email"
-                  />
-                </Form.Item>
-
-                <Form.Item
-                  label="Địa chỉ"
-                  name="address"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vui lòng nhập địa chỉ!",
-                    },
-                  ]}
-                >
-                  <Input onChange={(e) => setAddress(e.target.value)} />
-                </Form.Item>
-
-                <Form.Item
-                  label="Nội dung"
-                  name="content"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vui lòng nhập nội dung!",
-                    },
-                  ]}
-                >
-                  <TextArea
-                    rows={4}
-                    onChange={(e) => setContent(e.target.value)}
-                  />
-                </Form.Item>
-
-                <Form.Item
-                  style={{
-                    textAlign: "center",
+            <LoadingComponent isLoading={isLoadingCreate}>
+              <WrapperContactForm>
+                <Form
+                  name="basic"
+                  initialValues={{
+                    remember: true,
                   }}
+                  onFinish={() => onFinish()}
+                  onFinishFailed={() => {}}
+                  autoComplete="off"
+                  form={form}
                 >
-                  <Button type="primary" htmlType="submit" className="mb-5">
-                    Gửi liên hệ
-                  </Button>
-                </Form.Item>
-              </Form>
-            </WrapperContactForm>
-          </LoadingComponent>
+                  <Form.Item
+                    label="Họ và tên"
+                    name="userName"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng nhập họ và tên!",
+                      },
+                    ]}
+                  >
+                    <Input onChange={(e) => setUserName(e.target.value)} />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Email"
+                    name="email"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng nhập email!",
+                      },
+                    ]}
+                  >
+                    <Input
+                      onChange={(e) => setEmail(e.target.value)}
+                      type="email"
+                    />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Địa chỉ"
+                    name="address"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng nhập địa chỉ!",
+                      },
+                    ]}
+                  >
+                    <Input onChange={(e) => setAddress(e.target.value)} />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Nội dung"
+                    name="content"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng nhập nội dung!",
+                      },
+                    ]}
+                  >
+                    <TextArea
+                      rows={4}
+                      onChange={(e) => setContent(e.target.value)}
+                    />
+                  </Form.Item>
+
+                  <Form.Item
+                    style={{
+                      textAlign: "center",
+                      margin: "0",
+                    }}
+                  >
+                    <Button type="primary" htmlType="submit" className="mb-5">
+                      Gửi liên hệ
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </WrapperContactForm>
+            </LoadingComponent>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

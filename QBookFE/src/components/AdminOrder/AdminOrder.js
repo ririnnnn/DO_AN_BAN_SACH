@@ -376,9 +376,9 @@ const AdminOrder = () => {
     <div>
       <WrapperHeader>Quản lý đơn hàng</WrapperHeader>
 
-      <div style={{ width: "200px", height: "200px" }}>
+      {/* <div style={{ width: "200px", height: "200px" }}>
         <PieChartComponent dataChart={orders?.data} />
-      </div>
+      </div> */}
 
       <ModalComponent
         title="Xóa đơn hàng"

@@ -77,7 +77,6 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
         handleLogout();
     }
   };
-
   const content = (
     <div>
       <WrapperContentPopover onClick={() => handleClickNavigate("profile")}>
@@ -197,35 +196,30 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
   const singupMutation = useMutationHook((data) =>
     UserService.signupUser(data)
   );
-  const { singupData, singupIsLoading, isSuccess, isError } = mutation;
+  const { singupData, singupIsLoading, isSuccess, isError } = singupMutation;
   useEffect(() => {
     if (isSuccess && data?.status === "OK") {
       Message.success("Đăng ký tài khoản thành công!");
-      handleNavigateLogin();
     } else if (isError) {
       Message.error(data?.message);
     }
   }, [isSuccess]);
 
-  const handleNavigateLogin = () => {
-    navigate("/sign-in");
-  };
-
   return (
     <>
-      <div className="bg-[#189eff] flex justify-center">
+      <div className="bg-stone-300 flex justify-center ">
         <div className="w-[1285px] h-[70px] flex items-center justify-between py-[10px] overflow-x-auto whitespace-nowrap">
           <div
             onClick={() => navigate("/")}
-            className="text-lg cursor-pointer text-white font-semibold mr-4"
+            className="text-[32px] cursor-pointer text-red-900 font-semibold"
           >
-            QBook
+            QBook Store
           </div>
 
           {!isHiddenSearch && (
             <div className="mx-4">
               <WrapperSearch
-                placeholder="Vui lòng nhập..."
+                placeholder="truyện tranh..."
                 allowClear
                 enterButton={
                   <div onClick={handleSearch}>
@@ -253,22 +247,19 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
               {user?.access_token ? (
                 <LoadingComponent isLoading={isLoading}>
                   <Popover content={content} trigger="hover">
-                    <span className="text-white block cursor-pointer">
+                    <span className="text-black block cursor-pointer">
                       {valueName || user?.email}
                     </span>
                   </Popover>
                 </LoadingComponent>
               ) : (
                 <div
-                  className="flex flex-col text-white cursor-pointer"
+                  className="flex flex-col text-black cursor-pointer"
                   onClick={() => {
                     setIsModalOpen(true);
                   }}
                 >
                   <span>Đăng nhập/Đăng ký</span>
-                  <span className="flex items-center gap-1">
-                    Tài khoản <CaretDownOutlined />
-                  </span>
                 </div>
               )}
             </div>
@@ -279,11 +270,10 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
                 onClick={() => navigate("/order")}
               >
                 <Badge count={order.orderItems?.length} size="small">
-                  <div className="text-[30px] text-white">
+                  <div className="text-[30px] text-black">
                     <ShoppingCartOutlined />
                   </div>
                 </Badge>
-                <span className="text-white">Giỏ hàng</span>
               </div>
             )}
           </div>
@@ -344,7 +334,7 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
             <div className="text-center font-bold p-2">
               ------------ Đăng nhập bằng Google ------------
             </div>
-            <div>
+            <div className="flex justify-center items-center">
               <GoogleLogin></GoogleLogin>
             </div>
           </>

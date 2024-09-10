@@ -16,6 +16,5 @@ export const WrapperSearch = styled(Search)`
     width: 300px;
   }
   & .ant-input-wrapper .ant-input-group-addon .ant-btn {
-    background-color: #1465d6;
   }
 `;

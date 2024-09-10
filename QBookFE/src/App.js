@@ -73,10 +73,11 @@ function App() {
       return Promise.reject(error);
     }
   );
+  const clientID = `${process.env.REACT_APP_GOOGLE_CLIENT_ID}`;
 
   return (
     <div>
-      <GoogleOAuthProvider clientID="261928487436-bf2opv4npjjaddoj25upjq5oqhg7aipq.apps.googleusercontent.com">
+      <GoogleOAuthProvider clientId="261928487436-bf2opv4npjjaddoj25upjq5oqhg7aipq.apps.googleusercontent.com">
         <LoadingComponent isLoading={isLoading}>
           <Router>
             <Routes>

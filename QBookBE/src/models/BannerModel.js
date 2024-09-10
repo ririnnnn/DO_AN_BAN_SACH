@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const BannerSchema = new mongoose.Schema(
   {
     // Các trường dữ liệu của schema
-    id: { type: String, required: true, unique: true },
     desc: { type: String },
     activeFrom: { type: Date },
     activeTo: { type: Date },

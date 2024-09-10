@@ -4,6 +4,7 @@ import { useLocation, useParams } from "react-router-dom";
 import Loading from "../../components/LoadingComponent/LoadingComponent";
 import * as OrderService from "../../services/OrderService";
 import { convertDate, convertPrice } from "../../utils/utils";
+
 import {
   WrapperAllPrice,
   WrapperContentInfo,
@@ -19,6 +20,7 @@ import {
   WrapperStyleContent,
   WrapperStyleTitle,
 } from "./styles";
+import { Table } from "antd";
 
 const OrderDetailPage = () => {
   const params = useParams();
@@ -50,148 +52,125 @@ const OrderDetailPage = () => {
     return result;
   }, [data]);
 
+  const HTGH = {
+    GHTK: "Giao hàng tiết kiệm",
+    GHN: "Giao hàng nhanh",
+  };
+  const columns = [
+    {
+      title: "Sản phẩm",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Ảnh",
+      dataIndex: "image",
+      render: (image) => (
+        <img
+          alt={image}
+          src={image}
+          width="100px"
+          height="100px"
+          style={{ objectFit: "cover" }}
+        />
+      ),
+    },
+    {
+      title: "Đơn giá",
+      dataIndex: "price",
+      render: (price) => {
+        return `${convertPrice(price)} VND`;
+      },
+    },
+    {
+      title: "Giảm giá",
+      dataIndex: "discount",
+      render: (_, item) => {
+        return item?.discount
+          ? `${convertPrice(item?.price * (item?.discount / 100))} VND`
+          : "0 VND";
+      },
+    },
+    {
+      title: "Số lượng",
+      dataIndex: "amount",
+      key: "amount",
+    },
+    {
+      title: "Thành tiền",
+      dataIndex: "price",
+      render: (_, record) => {
+        const total =
+          record.price * record.amount -
+          ((record.price * record.discount) / 100) * record.amount;
+        return `${convertPrice(total)} VND`;
+      },
+    },
+  ];
   return (
     <Loading isLoading={isLoading}>
-      <div style={{ width: "100%", height: "100vh", background: "#f5f5fa" }}>
+      <div className="w-full h-screen bg-[f5f5fa]">
         <WrapperOrderDetailPage>
-          <WrapperStyleTitle>
-            Chi tiết đơn hàng{" "}
-            <span
-              style={{ color: "rgb(255, 66, 78)" }}
-            >{`DH${data?._id}`}</span>
-          </WrapperStyleTitle>
-          <WrapperHeaderUser>
-            <WrapperInfoUser>
-              <WrapperLabel>Địa chỉ người nhận</WrapperLabel>
-              <WrapperContentInfo>
-                <div className="name-info">
-                  <span>Tên người nhận: </span>
-                  <span>{data?.shippingAddress?.fullName}</span>
-                </div>
-                <div className="order-inf">
-                  <span>Địa chỉ: </span>
-                  <span>
-                    {`${data?.shippingAddress?.address}, ${data?.shippingAddress?.city}`}
-                  </span>
-                </div>
-                <div
-                  className="order-inf"
-                  style={{ fontSize: "1.5rem", padding: "5px 0" }}
-                >
-                  <span>Điện thoại: </span>
-                  <span>{`+84 ${data?.shippingAddress?.phone}`}</span>
-                </div>
-                <div
-                  className="order-inf"
-                  style={{ fontSize: "1.5rem", padding: "5px 0" }}
-                >
-                  <span>Ngày đặt: </span>
-                  <span>{convertDate(data?.createdAt)}</span>
-                </div>
-              </WrapperContentInfo>
-            </WrapperInfoUser>
-            <WrapperInfoUser>
-              <WrapperLabel>Hình thức giao hàng</WrapperLabel>
-              <WrapperContentInfo>
-                <div style={{ fontSize: "1.5rem", marginTop: 0 }}>
-                  <span className="name-delivery">{data?.deliveryMethod} </span>
-                  Giao hàng tiết kiệm
-                </div>
-                <div className="delivery-fee" style={{ fontSize: "1.5rem" }}>
-                  <span>Phí giao hàng: </span>
-                  <WrapperShippingPrice>{`${data?.shippingPrice} VND`}</WrapperShippingPrice>
-                </div>
-              </WrapperContentInfo>
-            </WrapperInfoUser>
-            <WrapperInfoUser>
-              <WrapperLabel>Hình thức thanh toán</WrapperLabel>
-              <WrapperContentInfo>
-                <div style={{ fontSize: "1.5rem" }}>{data?.paymentMethod}</div>
-                <div className="status-payment">
-                  {data?.isPaid ? "Đã thanh toán" : "Chưa thanh toán"}
-                </div>
-              </WrapperContentInfo>
-            </WrapperInfoUser>
-          </WrapperHeaderUser>
-          <WrapperStyleContent>
-            <div
-              style={{
-                fontSize: "1.5rem",
-                flex: 1,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <div style={{ width: "662px" }}>Sản phẩm</div>
-              <WrapperItemLabel>Giá</WrapperItemLabel>
-              <WrapperItemLabel>Số lượng</WrapperItemLabel>
-              <WrapperItemLabel>Giảm giá</WrapperItemLabel>
+          <label className="text-xl font-bold">
+            Chi tiết đơn hàng số:{" "}
+            <span className="text-red-600">{data?._id}</span>
+          </label>
+          <div className="bg-stone-100 rounded-lg p-2 text-xl my-2">
+            <label className="font-bold text-xl">Thông tin nhận hàng</label>
+            <div className="flex">
+              <div className="w-[33%]">
+                Tên người nhận: {data?.shippingAddress?.fullName}
+              </div>
+              <div className="w-[33%]">
+                Địa chỉ:{" "}
+                {`${data?.shippingAddress?.address}, ${data?.shippingAddress?.city}`}
+              </div>
+              <div className="w-[33%]">
+                Điện thoại: {`+84 ${data?.shippingAddress?.phone}`}
+              </div>
             </div>
-            {data?.orderItems?.map((item, index) => {
-              return (
-                <WrapperProduct key={index}>
-                  <WrapperNameProduct>
-                    <img
-                      src={item?.image}
-                      alt=""
-                      style={{
-                        width: "70px",
-                        height: "70px",
-                        objectFit: "cover",
-                        border: "1px solid rgb(238, 238, 238)",
-                        padding: "2px",
-                      }}
-                    />
-                    <div
-                      style={{
-                        width: 260,
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        marginLeft: "10px",
-                        height: "70px",
-                      }}
-                    >
-                      {item?.name}
-                    </div>
-                  </WrapperNameProduct>
-                  <WrapperItem>{`${convertPrice(
-                    item?.price
-                  )} VND`}</WrapperItem>
-                  <WrapperItem style={{ paddingLeft: "6px" }}>
-                    {item?.amount}
-                  </WrapperItem>
-                  <WrapperItem style={{ paddingLeft: "8px" }}>
-                    {item?.discount
-                      ? `${convertPrice(
-                          item?.price * item?.amount * (item?.discount / 100)
-                        )} VND`
-                      : "0 VND"}
-                  </WrapperItem>
-                </WrapperProduct>
-              );
-            })}
-
-            <WrapperAllPrice>
-              <WrapperItemLabel>Tạm tính</WrapperItemLabel>
-              <WrapperItem>{`${convertPrice(priceMemo)} VND`}</WrapperItem>
-            </WrapperAllPrice>
-            <WrapperAllPrice>
-              <WrapperItemLabel>Phí vận chuyển</WrapperItemLabel>
-              <WrapperItem>
-                {`${convertPrice(data?.shippingPrice) || 0} VND`}
-              </WrapperItem>
-            </WrapperAllPrice>
-            <WrapperAllPrice>
-              <WrapperItemLabel>Tổng cộng</WrapperItemLabel>
-              <WrapperItem>
-                <WrapperItem>{`${convertPrice(
+          </div>
+          <div className="bg-stone-100 rounded-lg p-2 text-xl my-2">
+            <label className="font-bold text-xl">Thông tin đơn hàng</label>
+            <div className="flex">
+              <div className="w-[33%]">
+                Ngày đặt: {convertDate(data?.createdAt)}
+              </div>
+              <div className="w-[33%]">
+                Hình thức giao hàng: {HTGH[data?.deliveryMethod]}
+              </div>
+              <div className="w-[33%]">
+                Hình thức thanh toán: {data?.paymentMethod}
+              </div>
+            </div>
+          </div>
+          <Table
+            columns={columns}
+            dataSource={data?.orderItems}
+            pagination={false}
+          ></Table>
+          <div className="flex justify-end text-xl font-bold px-5 py-2">
+            <div className="w-fit">
+              <div className="w-fit">
+                Thành giá:{" "}
+                <span className="text-red-600">{`${convertPrice(
+                  data?.itemsPrice
+                )} VND`}</span>
+              </div>
+              <div className="w-fit">
+                Phí vận chuyển:{" "}
+                <span className="text-red-600">{`${convertPrice(
+                  data?.shippingPrice
+                )} VND`}</span>
+              </div>
+              <div className="w-fit">
+                Tổng tiền:{" "}
+                <span className="text-red-600">{`${convertPrice(
                   data?.totalPrice
-                )} VND`}</WrapperItem>
-              </WrapperItem>
-            </WrapperAllPrice>
-          </WrapperStyleContent>
+                )} VND`}</span>
+              </div>
+            </div>
+          </div>
         </WrapperOrderDetailPage>
       </div>
     </Loading>

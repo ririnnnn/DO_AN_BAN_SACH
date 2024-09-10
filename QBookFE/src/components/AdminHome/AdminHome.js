@@ -66,7 +66,7 @@ const AdminHome = () => {
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <div>
+      {/* <div>
         <Row gutter={16}>
           <Col span={6}>
             <Card
@@ -157,7 +157,7 @@ const AdminHome = () => {
         <div style={{ width: "100%", height: "500px", marginTop: "30px" }}>
           <ContentOfTooltip dataOrder={orderAll} dataYear={year}/>
         </div>
-      </LoadingComponent>
+      </LoadingComponent> */}
     </div>
   );
 };

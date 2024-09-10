@@ -166,7 +166,7 @@ const getAuthor = (page, limit) => {
       reject(e);
     }
   });
-}
+};
 
 module.exports = {
   getAuthor,

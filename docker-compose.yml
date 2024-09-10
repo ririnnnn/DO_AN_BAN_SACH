@@ -1,0 +1,31 @@
+version: '1'
+services:
+  frontend:
+    build: ./QBookFE
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./QBookFE:/app
+    environment:
+      - NODE_ENV=development
+
+  backend:
+    build: ./QBookBE
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./QBookBE:/app
+    environment:
+      - NODE_ENV=development
+  mongo:
+    image: mongo:4.4
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=qbookdb
+volumes:
+  mongo-data:

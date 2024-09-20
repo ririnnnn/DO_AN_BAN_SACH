@@ -1,4 +1,4 @@
-import { Pagination, Table } from "antd";
+import { Pagination, Table, Input } from "antd";
 import { Excel } from "antd-table-saveas-excel";
 import { useRef, useState } from "react";
 import ButtonComponent from "../ButtonComponent/ButtonComponent";
@@ -17,6 +17,7 @@ const TableComponent = (props) => {
     data: dataSource = [],
     handleDelete,
     handleOnChangePage,
+    handleSearch,
   } = props;
 
   const newColumns = () => {
@@ -56,13 +57,12 @@ const TableComponent = (props) => {
 
   return (
     <LoadingComponent isLoading={isLoading}>
-      <div style={{ display: "flex", gap: "20px" }}>
+      <div className="flex gap-[20px] items-center mb-3">
         {isSelectedRowKeys.length > 0 && (
           <ButtonComponent
             buttonText="Xóa tất cả"
             styleButton={{
               backgroundColor: "#fff",
-              marginBottom: "20px",
               color: "#007fff",
               border: "1px solid #007fff",
               fontWeight: 600,
@@ -79,12 +79,16 @@ const TableComponent = (props) => {
           size="large"
           styleButton={{
             backgroundColor: "#fff",
-            marginBottom: "20px",
             color: "#007fff",
             border: "1px solid #007fff",
             fontWeight: 600,
           }}
         />
+        {/* <Input.Search
+          placeholder="input search text"
+          onSearch={() => {}}
+          style={{ width: 200 }}
+        /> */}
       </div>
 
       <Table

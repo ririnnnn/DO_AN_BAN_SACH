@@ -13,6 +13,7 @@ import TypeProduct from "../../components/TypeProduct/TypeProduct";
 import { useDebounceHook } from "../../hooks/useDebounceHook";
 import * as GenreService from "../../services/GenreService";
 import * as ProductService from "../../services/ProductService";
+import * as BannerService from "../../services/BannerService";
 import ListProducts from "./ListProducts/ListProducts";
 import { WrapperButtonComponent, WrapperProducts } from "./styles";
 
@@ -25,6 +26,7 @@ const HomePage = () => {
   const [isLoadingBookTruyenTranh, setIsLoadingBookTruyenTranh] =
     useState(false);
   const [isLoadingBookMangaComic, setIsLoadingBookMangaComic] = useState(false);
+  const [isLoadingBannerImages, setIsLoadingBannerImages] = useState(false);
   const [limitProduct, setLimitProduct] = useState(6);
 
   const valueSearchInput = useSelector((state) => state.product.search);
@@ -34,6 +36,7 @@ const HomePage = () => {
   const [productVN, setProductVN] = useState([]);
   const [productTruyenTranh, setProductTruyenTranh] = useState([]);
   const [productMangaComic, setProductMangaComic] = useState([]);
+  const [bannerImages, setBannerImages] = useState([]);
 
   const navigate = useNavigate();
 
@@ -94,11 +97,23 @@ const HomePage = () => {
     setIsLoadingBookMangaComic(false);
   };
 
+  const fetchBannerImages = async (limit) => {
+    setIsLoadingBannerImages(true);
+    const res = await BannerService.getBannerDisplay(limit);
+    const data = res?.data;
+    console.log(data);
+    setBannerImages(data.map((item) => item.image));
+    setIsLoadingBannerImages(false);
+    // setProductMangaComic(res?.data);
+    // setIsLoadingBookMangaComic(false);
+  };
+
   useEffect(() => {
     fetchBookBestSeller(1, 12);
     fetchBookVanHocVietNam("6646bcdd97a1e099aa7b95da", 12);
     fetchBookTruyenTranh("664621477b7a9f1af95d7473", 12);
     fetchBookMangaComic("6646c46126ef6ab2ab486b0b", 12);
+    fetchBannerImages(5);
     fetchAllGenreProduct();
   }, []);
 
@@ -149,7 +164,9 @@ const HomePage = () => {
         className="body"
       >
         <div className="w-[1285px] mx-auto my-0">
-          <SliderComponent arrImages={[slider1, slider2, slider3]} />
+          <LoadingComponent isLoading={isLoadingBannerImages}>
+            <SliderComponent arrImages={bannerImages} />
+          </LoadingComponent>
 
           <LoadingComponent isLoading={isLoading}>
             <div className="hidden lg:block">

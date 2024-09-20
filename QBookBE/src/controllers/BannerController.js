@@ -100,7 +100,6 @@ const updateBanner = async (req, res) => {
 const deleteBanner = async (req, res) => {
   try {
     const bannerId = req.params.id;
-    console.log(bannerId);
     if (!bannerId) {
       return res.status(400).json({
         status: "ERROR",

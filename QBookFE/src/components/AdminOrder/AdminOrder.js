@@ -16,7 +16,6 @@ import InputComponent from "../InputComponent/InputComponent";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import ModalComponent from "../ModalComponent/ModalComponent";
 import TableComponent from "../TableComponent/TableComponent";
-import PieChartComponent from "./PieChartComponent";
 import { WrapperHeader } from "./styles";
 
 const AdminOrder = () => {
@@ -261,7 +260,81 @@ const AdminOrder = () => {
       email: orderFind?.shippingAddress?.email,
     });
   };
-
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <InputComponent
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1677ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+  });
   const renderIcons = () => {
     return (
       <div>
@@ -286,6 +359,7 @@ const AdminOrder = () => {
     {
       title: "Mã đơn hàng",
       dataIndex: "codeOrder",
+      ...getColumnSearchProps("_id"),
     },
     {
       title: "Tên người đặt",
@@ -375,10 +449,6 @@ const AdminOrder = () => {
   return (
     <div>
       <WrapperHeader>Quản lý đơn hàng</WrapperHeader>
-
-      {/* <div style={{ width: "200px", height: "200px" }}>
-        <PieChartComponent dataChart={orders?.data} />
-      </div> */}
 
       <ModalComponent
         title="Xóa đơn hàng"

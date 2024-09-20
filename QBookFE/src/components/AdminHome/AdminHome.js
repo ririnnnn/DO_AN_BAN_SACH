@@ -17,52 +17,52 @@ import { WrapperSelect } from "./styles";
 
 const AdminHome = () => {
   const user = useSelector((state) => state.user);
-  const [countOrder, setCountOrder] = useState(0);
-  const [countUser, setCountUser] = useState(0);
-  const [countProduct, setCountProduct] = useState(0);
-  const [orderAll, setOrderAll] = useState(null);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [isLoadingOrder, setIsLoadingOrder] = useState(false);
-  const [year, setYear] = useState("2024");
+  // const [countOrder, setCountOrder] = useState(0);
+  // const [countUser, setCountUser] = useState(0);
+  // const [countProduct, setCountProduct] = useState(0);
+  // const [orderAll, setOrderAll] = useState(null);
+  // const [totalPrice, setTotalPrice] = useState(0);
+  // const [isLoadingOrder, setIsLoadingOrder] = useState(false);
+  // const [year, setYear] = useState("2024");
 
-  const getCountUser = async () => {
-    const res = await UserService.getCountUser(user?.access_token);
-    setCountUser(res?.data);
-  };
+  // const getCountUser = async () => {
+  //   const res = await UserService.getCountUser(user?.access_token);
+  //   setCountUser(res?.data);
+  // };
 
-  const getCountProduct = async () => {
-    const res = await ProductService.getCountProduct(user?.access_token);
-    setCountProduct(res?.data);
-  };
+  // const getCountProduct = async () => {
+  //   const res = await ProductService.getCountProduct(user?.access_token);
+  //   setCountProduct(res?.data);
+  // };
 
-  const getCountOrder = async () => {
-    const res = await OrderService.getCountOrder(user?.access_token);
-    setCountOrder(res?.data);
-  };
+  // const getCountOrder = async () => {
+  //   const res = await OrderService.getCountOrder(user?.access_token);
+  //   setCountOrder(res?.data);
+  // };
 
-  const getOrderAll = async () => {
-    setIsLoadingOrder(true);
-    const res = await OrderService.getAllOrder(user?.access_token);
-    setOrderAll(res?.data);
-    setIsLoadingOrder(false);
-  };
+  // const getOrderAll = async () => {
+  //   setIsLoadingOrder(true);
+  //   const res = await OrderService.getAllOrder(user?.access_token);
+  //   setOrderAll(res?.data);
+  //   setIsLoadingOrder(false);
+  // };
 
-  const getTotalPrice = async () => {
-    const res = await OrderService.getTotalPrice(user?.access_token);
-    setTotalPrice(res?.data);
-  };
+  // const getTotalPrice = async () => {
+  //   const res = await OrderService.getTotalPrice(user?.access_token);
+  //   setTotalPrice(res?.data);
+  // };
 
-  useEffect(() => {
-    getCountUser();
-    getCountProduct();
-    getCountOrder();
-    getOrderAll();
-    getTotalPrice();
-  }, []);
+  // useEffect(() => {
+  //   getCountUser();
+  //   getCountProduct();
+  //   getCountOrder();
+  //   getOrderAll();
+  //   getTotalPrice();
+  // }, []);
 
-  const handleOnChangeSelect = (value) => {
-    setYear(value);
-  };
+  // const handleOnChangeSelect = (value) => {
+  //   setYear(value);
+  // };
 
   return (
     <div style={{ width: "100%", height: "100%" }}>

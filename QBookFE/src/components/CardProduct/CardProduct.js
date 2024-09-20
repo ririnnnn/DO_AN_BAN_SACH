@@ -28,7 +28,7 @@ const CardProduct = (props) => {
       // onClick={() => countInStock !== 0 && handleProductDetail(id)}
       // disabled={countInStock === 0}
     >
-      <img
+      {/* <img
         src={logo}
         alt="logo"
         style={{
@@ -39,10 +39,14 @@ const CardProduct = (props) => {
           left: "-1px",
           borderTopLeftRadius: "8px",
         }}
-      />
-      <div className="absolute top-0 right-0 w-10 h-10 rounded-[50%] bg-[#d51c24] text-white text-base leading-10">
-        {`-${discount}%`}
-      </div>
+      /> */}
+      {discount > 0 ? (
+        <div className="absolute top-0 right-0 w-10 h-10 rounded-[50%] bg-[#d51c24] text-white text-base leading-10">
+          {`-${discount}%`}
+        </div>
+      ) : (
+        ""
+      )}
       <div className="text-base whitespace-nowrap overflow-hidden text-ellipsis">
         {name}
       </div>
@@ -53,9 +57,18 @@ const CardProduct = (props) => {
         </div>
         <div> | Đã bán {selled || 0}</div>
       </div>
-      <div className="flex items-center justify-between text-[#ff424e] text-base font-semibold">
+      <div
+        className={
+          "flex items-center text-[#ff424e] text-base font-semibold " +
+          (discount > 0 ? "justify-between" : "justify-end")
+        }
+      >
         <div>{`${convertPrice(price - price * (discount / 100))}₫`}</div>
-        <s className="text-gray-500">{`${convertPrice(price)}₫`}</s>
+        {discount > 0 ? (
+          <s className="text-gray-500">{`${convertPrice(price)}₫`}</s>
+        ) : (
+          ""
+        )}
       </div>
     </WrapperCardStyle>
   );

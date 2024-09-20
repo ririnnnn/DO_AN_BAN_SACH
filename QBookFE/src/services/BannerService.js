@@ -3,7 +3,7 @@ import authorizedAxiosInstance from "../utils/authorizedAxios";
 
 export const getBannerDisplay = async (limit) => {
   const res = await axios.get(
-    `${process.env.REACT_APP_API}/banner?limit=${limit}`
+    `${process.env.REACT_APP_API}/banner/display?limit=${limit}`
   );
   return res.data;
 };

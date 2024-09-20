@@ -403,7 +403,7 @@ const OrderPage = () => {
                 onClick={handleBuyProduct}
                 styleButton={{
                   backgroundColor: "rgb(255, 66, 78)",
-                  width: "350px",
+                  width: "100%",
                   height: "48px",
                   border: "none",
                 }}

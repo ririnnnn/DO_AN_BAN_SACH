@@ -348,7 +348,6 @@ const AdminBanner = () => {
               remember: true,
             }}
             onFinish={() => {
-              console.log();
               handleCreateBanner();
             }}
             autoComplete="off"

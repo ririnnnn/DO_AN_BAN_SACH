@@ -345,12 +345,12 @@ const TypeProductPage = () => {
           >
             Tin tức
           </div>
-          <div
+          {/* <div
             className="text-base p-3 cursor-pointer hover:bg-[#189eff] hover:text-white transition"
             onClick={() => navigate("/contact")}
           >
             Liên hệ
-          </div>
+          </div> */}
         </div>
       </div>
       <WrapperTypeProduct>

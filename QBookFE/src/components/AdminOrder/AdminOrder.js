@@ -4,7 +4,7 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Form, Select, Space } from "antd";
+import { Button, Form, Modal, Select, Space } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import * as Message from "../../components/Message/Message";
@@ -335,23 +335,288 @@ const AdminOrder = () => {
       }
     },
   });
-  const renderIcons = () => {
+  const [modalContent, setModalContent] = useState({});
+  const [isShowModal, setIsShowModal] = useState(false);
+  const handleChangeStatus = async (id, newStatus) => {
+    const order = await OrderService.getOrderDetail(id, user?.access_token);
+    if (newStatus == "Đang giao hàng") {
+      setModalContent({
+        footer: (
+          <div>
+            <button
+              className="py-1 px-3 rounded bg-gray-700 text-white mr-2"
+              onClick={() => {
+                setIsShowModal(false);
+              }}
+            >
+              Hủy
+            </button>
+            <button
+              className="py-1 px-3 rounded bg-green-700 text-white"
+              onClick={async () => {
+                order.isDelivered = newStatus;
+                const result = await OrderService.updateOrder(
+                  id,
+                  order,
+                  user?.access_token
+                );
+                console.log(result);
+                getOrderAdmin();
+                setIsShowModal(false);
+              }}
+            >
+              Đồng ý
+            </button>
+          </div>
+        ),
+        content: (
+          <>
+            <div>Xác nhận bắt đầu giao hàng cho đơn hàng sau</div>
+            <div>
+              Đơn hàng số:{" "}
+              <span className="text-red-900 font-semibold">{id}</span>
+            </div>
+          </>
+        ),
+        title: "Xác nhận bắt đầu giao hàng",
+      });
+    } else if (newStatus == "Đã giao hàng") {
+      setModalContent({
+        footer: (
+          <div>
+            <button
+              className="py-1 px-3 rounded bg-gray-700 text-white mr-2"
+              onClick={() => {
+                setIsShowModal(false);
+              }}
+            >
+              Hủy
+            </button>
+            <button
+              className="py-1 px-3 rounded bg-green-700 text-white"
+              onClick={async () => {
+                order.isDelivered = newStatus;
+                order.isPaid = true;
+                const result = await OrderService.updateOrder(
+                  id,
+                  order,
+                  user?.access_token
+                );
+                console.log(result);
+                getOrderAdmin();
+                setIsShowModal(false);
+              }}
+            >
+              Đồng ý
+            </button>
+          </div>
+        ),
+        content: (
+          <>
+            <div>Xác nhận giao hàng thành công cho đơn hàng sau</div>
+            <div>
+              Đơn hàng số:{" "}
+              <span className="text-red-900 font-semibold">{id}</span>
+            </div>
+            {!order.data.isPaid ? (
+              <div className="flex align-center justify-center">
+                <div className="w-8 mr-2">
+                  <span className="text-yellow-700 text-[32px]">
+                    <i className="fa-solid fa-triangle-exclamation"></i>
+                  </span>
+                </div>
+                <div className="flex-1">
+                  Đơn thanh toán khi nhận hàng, xác nhận khách hàng đã thanh
+                  toán trước khi xác nhận.
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+          </>
+        ),
+        title: "Xác nhận giao hàng thành công",
+      });
+    } else if (newStatus == "Giao hàng không thành công") {
+      setModalContent({
+        footer: (
+          <div>
+            <button
+              className="py-1 px-3 rounded bg-gray-700 text-white mr-2"
+              onClick={() => {
+                setIsShowModal(false);
+              }}
+            >
+              Hủy
+            </button>
+            <button
+              className="py-1 px-3 rounded bg-green-700 text-white"
+              onClick={async () => {
+                order.isDelivered = newStatus;
+                const result = await OrderService.updateOrder(
+                  id,
+                  order,
+                  user?.access_token
+                );
+                getOrderAdmin();
+                setIsShowModal(false);
+              }}
+            >
+              Đồng ý
+            </button>
+          </div>
+        ),
+        content: (
+          <>
+            <div>Xác nhận giao hàng không thành công cho đơn hàng sau</div>
+            <div>
+              Đơn hàng số:{" "}
+              <span className="text-red-900 font-semibold">{id}</span>
+            </div>
+          </>
+        ),
+        title: "Xác nhận giao hàng không thành công",
+      });
+    } else if (newStatus == "Đã hủy") {
+      setModalContent({
+        footer: (
+          <div>
+            <button
+              className="py-1 px-3 rounded bg-gray-700 text-white mr-2"
+              onClick={() => {
+                setIsShowModal(false);
+              }}
+            >
+              Hủy
+            </button>
+            <button
+              className="py-1 px-3 rounded bg-green-700 text-white"
+              onClick={async () => {
+                const result = await OrderService.deleteOrder(
+                  id,
+                  user?.access_token,
+                  order.data.orderItems,
+                  order.data.email
+                );
+                getOrderAdmin();
+                setIsShowModal(false);
+              }}
+            >
+              Đồng ý
+            </button>
+          </div>
+        ),
+        content: (
+          <>
+            <div>Xác nhận hủy đơn hàng sau</div>
+            <div>
+              Đơn hàng số:{" "}
+              <span className="text-red-900 font-semibold">{id}</span>
+            </div>
+          </>
+        ),
+        title: "Xác nhận hủy đơn hàng",
+      });
+    }
+    setIsShowModal(true);
+  };
+  const renderIcons = (text, record, index) => {
+    const changeStatusButtons = {
+      "Chờ giao hàng": (
+        <div className="w-max">
+          <button
+            className="w-8 h-8 mr-1 rounded border-blue-500 border-2 font-semibold text-blue-500"
+            title="Giao hàng"
+            onClick={() => {
+              handleChangeStatus(record._id, "Đang giao hàng");
+            }}
+          >
+            <i className="fa-solid fa-truck"></i>
+          </button>
+          <button
+            className="w-8 h-8 mr-1 rounded border-red-500 border-2 font-semibold text-red-500"
+            title="Hủy đơn hàng"
+            onClick={() => {
+              handleChangeStatus(record._id, "Đã hủy");
+            }}
+          >
+            <i className="fa-solid fa-ban"></i>
+          </button>
+        </div>
+      ),
+      "Đang giao hàng": (
+        <div className="w-max">
+          <button
+            className="w-8 h-8 mr-1 rounded border-green-500 border-2 font-semibold text-green-500"
+            title="Giao hàng thành công"
+            onClick={() => {
+              handleChangeStatus(record._id, "Đã giao hàng");
+            }}
+          >
+            <i className="fa-solid fa-check"></i>
+          </button>
+          <button
+            className="w-8 h-8 mr-1 rounded border-yellow-500 border-2 font-semibold text-yellow-500"
+            title="Giao hàng không thành công"
+            onClick={() => {
+              handleChangeStatus(record._id, "Giao hàng không thành công");
+            }}
+          >
+            <i class="fa-solid fa-circle-exclamation"></i>
+          </button>
+          <button
+            className="w-8 h-8 mr-1 rounded border-red-500 border-2 font-semibold text-red-500"
+            title="Hủy đơn hàng"
+            onClick={() => {
+              handleChangeStatus(record._id, "Đã hủy");
+            }}
+          >
+            <i className="fa-solid fa-ban"></i>
+          </button>
+        </div>
+      ),
+      "Đã giao hàng": <></>,
+      "Đã hủy": <></>,
+      "Giao hàng không thành công": (
+        <div className="w-max">
+          <button
+            className="w-8 h-8 mr-1 rounded border-gray-500 border-2 font-semibold text-gray-500"
+            title="Giao lại"
+            onClick={() => {
+              handleChangeStatus(record._id, "Chờ giao hàng");
+            }}
+          >
+            <i className="fa-solid fa-rotate-right"></i>
+          </button>
+          <button
+            className="w-8 h-8 mr-1 rounded border-red-500 border-2 font-semibold text-red-500"
+            title="Hủy đơn hàng"
+            onClick={() => {
+              handleChangeStatus(record._id, "Đã hủy");
+            }}
+          >
+            <i className="fa-solid fa-ban"></i>
+          </button>
+        </div>
+      ),
+    };
     return (
-      <div>
-        <DeleteOutlined
-          style={{
-            fontSize: "26px",
-            color: "red",
-            cursor: "pointer",
-            marginRight: "10px",
-          }}
-          onClick={() => setIsOpenModalDelete(true)}
-        />
-        <EditOutlined
-          style={{ fontSize: "26px", color: "orange", cursor: "pointer" }}
-          onClick={handleGetDetailProduct}
-        />
-      </div>
+      <div>{changeStatusButtons[record["isDelivered"]]}</div>
+      // <div>
+      //   <DeleteOutlined
+      //     style={{
+      //       fontSize: "26px",
+      //       color: "red",
+      //       cursor: "pointer",
+      //       marginRight: "10px",
+      //     }}
+      //     onClick={() => setIsOpenModalDelete(true)}
+      //   />
+      //   <EditOutlined
+      //     style={{ fontSize: "26px", color: "orange", cursor: "pointer" }}
+      //     onClick={handleGetDetailProduct}
+      //   />
+      // </div>
     );
   };
 
@@ -634,6 +899,16 @@ const AdminOrder = () => {
           </Form>
         </LoadingComponent>
       </DrawerComponent>
+      <Modal
+        open={isShowModal}
+        footer={modalContent.footer}
+        title={modalContent.title}
+        onCancel={() => {
+          setIsShowModal(false);
+        }}
+      >
+        {modalContent.content}
+      </Modal>
 
       <div style={{ marginTop: "20px" }}>
         <LoadingComponent isLoading={isLoadingDeleteManyOrder}>

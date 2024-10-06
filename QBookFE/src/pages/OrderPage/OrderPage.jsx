@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   removeProduct,
   removeMoreProduct,
+  setNumberProduct,
   increaseProduct,
   decreaseProduct,
   addOrderItemsSelected,
@@ -83,8 +84,14 @@ const OrderPage = () => {
       } else {
         alert("Số lượng sản phẩm trong kho đã hết!");
       }
-    } else {
+    } else if (type === "decrease") {
       dispatch(decreaseProduct({ productId }));
+    } else {
+      if (!check) {
+        dispatch(setNumberProduct({ type, productId }));
+      } else {
+        alert("Số lượng sản phẩm trong kho đã hết!");
+      }
     }
   };
 
@@ -217,7 +224,7 @@ const OrderPage = () => {
     if (user?.email !== "") {
       setIsOpenModalUpdateInfo(true);
     } else {
-      navigate("/sign-in");
+      navigate("/");
     }
   };
 
@@ -322,10 +329,13 @@ const OrderPage = () => {
                       defaultValue={item.amount}
                       value={item.amount}
                       style={{
-                        width: "40px",
+                        width: "60px",
                         border: "none",
                         margin: "auto",
                         top: "1px",
+                      }}
+                      onChange={(e) => {
+                        handleOnChangeNumberProduct(e, item.product);
                       }}
                       min={1}
                       max={item.countInStock}

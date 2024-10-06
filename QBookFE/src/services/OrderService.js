@@ -1,5 +1,6 @@
 import axios from "axios";
 import { axiosJWT } from "./UserService";
+import authorizedAxiosInstance from "../utils/authorizedAxios";
 
 export const createOrder = async (data, access_token) => {
   const res = await axiosJWT.post(`${process.env.REACT_APP_API}/order`, data, {
@@ -70,7 +71,7 @@ export const deleteOrder = async (id, access_token, orderItems, email) => {
 };
 
 export const getAllOrder = async (access_token) => {
-  const res = await axiosJWT.get(
+  const res = await authorizedAxiosInstance.get(
     `${process.env.REACT_APP_API}/order/get-all-order`,
     {
       headers: {

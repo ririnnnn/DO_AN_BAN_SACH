@@ -1,5 +1,24 @@
 const StatisticService = require("../services/StatisticService");
 
+const getStatistic = async (req, res) => {
+  try {
+    console.log("statistic controller");
+    const { groupBy, countBy, from, type } = req.query;
+    if (!groupBy || !countBy || !from) {
+      return res.status(400).json({
+        status: "ERROR",
+        message: "groupBy, countBy, from are required!",
+      });
+    }
+    const response = await StatisticService.getStatistic(req.query);
+    return res.status(200).json(response);
+  } catch (e) {
+    return res.status(500).json({
+      message: e,
+    });
+  }
+};
+
 const createStatistic = async (req, res) => {
   try {
     const { date, statisticByNumber, statisticByRevenue, bestSeller } =
@@ -82,6 +101,7 @@ const deleteStatistic = async (req, res) => {
 };
 
 module.exports = {
+  getStatistic,
   createStatistic,
   getStatisticById,
   updateStatistic,

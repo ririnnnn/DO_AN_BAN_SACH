@@ -82,6 +82,7 @@ const createOrder = (reqBody) => {
           resolve({
             status: "OK",
             message: "Order the product successfully!",
+            orderID: newOrder._id.toString(),
           });
         }
       }
@@ -214,9 +215,12 @@ const deleteOrder = (orderId, reqBody) => {
           { $inc: { countInStock: +order?.amount, selled: -order?.amount } },
           { new: true }
         );
-
         if (productData) {
-          const orderDelete = await Order.findByIdAndDelete(orderId);
+          const orderDelete = await Order.findByIdAndUpdate(
+            orderId,
+            { isDelivered: "Đã hủy" },
+            { new: true }
+          );
 
           if (orderDelete === null) {
             resolve({

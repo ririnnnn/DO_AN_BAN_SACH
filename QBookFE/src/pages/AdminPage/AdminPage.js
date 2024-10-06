@@ -63,7 +63,7 @@ const AdminPage = () => {
     getItem("Nhà xuất bản", "publisher", <FormOutlined />),
     getItem("Thể loại", "genre", <AccountBookOutlined />),
     getItem("Tin tức", "news", <ReadOutlined />),
-    getItem("Liên hệ", "contact", <PhoneOutlined />),
+    // getItem("Liên hệ", "contact", <PhoneOutlined />),
     getItem("Banner", "banner", <BoxPlotOutlined />),
   ];
   const [keySelected, setKeySelected] = useState("home");

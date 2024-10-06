@@ -57,6 +57,17 @@ export const orderSlice = createSlice({
         state.orderItems = newOrderItems;
       }
     },
+    setNumberProduct: (state, action) => {
+      const { productId, type } = action.payload;
+      const findProduct = state.orderItems.find(
+        (item) => item.product === productId
+      );
+      const findProductSelected = state.orderItemsSelected.find(
+        (item) => item.product === productId
+      );
+      if (findProduct) findProduct.amount = type;
+      if (findProductSelected) findProductSelected.amount = type;
+    },
     increaseProduct: (state, action) => {
       const { productId } = action.payload;
 
@@ -108,6 +119,7 @@ export const {
   addProductToCart,
   removeProduct,
   removeMoreProduct,
+  setNumberProduct,
   increaseProduct,
   decreaseProduct,
   addOrderItemsSelected,

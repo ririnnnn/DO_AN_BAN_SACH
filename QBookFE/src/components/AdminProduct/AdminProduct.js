@@ -447,8 +447,7 @@ const AdminProduct = () => {
         <img
           alt={image}
           src={image}
-          width="150px"
-          height="150px"
+          className="max-w-[50px] max-h-[50px]"
           style={{ objectFit: "cover" }}
         />
       ),
@@ -506,6 +505,10 @@ const AdminProduct = () => {
     {
       title: "Trọng lượng",
       dataIndex: "weight",
+    },
+    {
+      title: "Số lượng còn",
+      dataIndex: "countInStock",
     },
     {
       title: "Hành động",

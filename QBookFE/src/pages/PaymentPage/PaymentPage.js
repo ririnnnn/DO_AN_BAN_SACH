@@ -30,6 +30,8 @@ import {
   WrapperTotal,
   WrapperTotalPrice,
 } from "./styles";
+import CryptoJS from "crypto-js";
+import axios from "axios";
 
 const PaymentPage = () => {
   const [checkedList, setCheckedList] = useState([]);
@@ -330,7 +332,48 @@ const PaymentPage = () => {
               </WrapperRight>
               <div style={{ paddingTop: "30px" }}>
                 {paymentMethod === "Thanh toán bằng VNPAY" ? (
-                  <button className="w-full bg-blue-500 rounded h-12 font-bold text-[15px] text-red-600">
+                  <button
+                    className="w-full bg-blue-500 rounded h-12 font-bold text-[15px] text-red-600"
+                    onClick={() => {
+                      const handleRedirect = async () => {
+                        try {
+                          // Make a POST request to your API endpoint
+                          const orderData = {
+                            orderItems: orderItemsSelected,
+                            fullName: user?.name,
+                            address: user?.address,
+                            city: user?.city,
+                            phone: user?.phone,
+                            paymentMethod: paymentMethod,
+                            deliveryMethod: deliveryMethod,
+                            itemsPrice: priceMemo,
+                            shippingPrice: priceDeliveryMemo,
+                            totalPrice: priceTotalMemo,
+                            userId: user?.id,
+                            isPaid: false,
+                            email: user?.email,
+                          };
+                          const response = await axios.post(
+                            `${process.env.REACT_APP_API}/payment/create_payment_url`,
+                            {
+                              amount: priceTotalMemo,
+                              orderInfo: "testlink",
+                              orderType: "other",
+                              orderData: orderData,
+                            }
+                          );
+                          // Assuming the API returns a redirectUrl in the response data
+                          const redirectUrl = response.data.url; // Adjust based on your API response structure
+
+                          // Redirect to the URL
+                          window.location.href = redirectUrl;
+                        } catch (error) {
+                          console.error("Error:", error);
+                        }
+                      };
+                      handleRedirect();
+                    }}
+                  >
                     Thanh toán VNPAY
                   </button>
                 ) : (

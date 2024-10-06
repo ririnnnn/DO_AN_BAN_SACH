@@ -104,12 +104,12 @@ function ContactPage() {
           >
             Tin tức
           </div>
-          <div
+          {/* <div
             className="text-base p-3 cursor-pointer hover:bg-[#189eff] hover:text-white transition"
             onClick={() => navigate("/contact")}
           >
             Liên hệ
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="bg-[#f5f5fa]">
@@ -126,7 +126,7 @@ function ContactPage() {
               </div>
               <div className="w-calc-100-minus-40 pl-3 text-base">
                 <div className="font-semibold">Địa chỉ:</div>
-                <div>Cầu giấy, Hà Nội, Nghệ An </div>
+                <div>Nghệ An </div>
               </div>
             </div>
 
@@ -158,7 +158,7 @@ function ContactPage() {
                   initialValues={{
                     remember: true,
                   }}
-                  onFinish={() => onFinish()}
+                  onFinish={() => {}}
                   onFinishFailed={() => {}}
                   autoComplete="off"
                   form={form}

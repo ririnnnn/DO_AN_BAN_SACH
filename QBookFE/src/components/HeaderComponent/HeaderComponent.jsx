@@ -93,9 +93,9 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
       <WrapperContentPopover onClick={() => handleClickNavigate("order")}>
         Đơn hàng của tôi
       </WrapperContentPopover>
-      <WrapperContentPopover onClick={() => handleClickNavigate("contact")}>
+      {/* <WrapperContentPopover onClick={() => handleClickNavigate("contact")}>
         Liên hệ của tôi
-      </WrapperContentPopover>
+      </WrapperContentPopover> */}
       <WrapperContentPopover onClick={() => handleClickNavigate()}>
         Đăng xuất
       </WrapperContentPopover>
@@ -193,9 +193,10 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
     }
   }, [data?.status]);
   // sign up modal
-  const singupMutation = useMutationHook((data) =>
-    UserService.signupUser(data)
-  );
+  const singupMutation = useMutationHook((data) => {
+    console.log(data);
+    UserService.signupUser(data);
+  });
   const { singupData, singupIsLoading, isSuccess, isError } = singupMutation;
   useEffect(() => {
     if (isSuccess && data?.status === "OK") {
@@ -204,6 +205,9 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
       Message.error(data?.message);
     }
   }, [isSuccess]);
+  const handleSignUp = () => {
+    singupMutation.mutate({ fullName, email, password, password2 });
+  };
 
   return (
     <>
@@ -256,6 +260,7 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
                 <div
                   className="flex flex-col text-black cursor-pointer"
                   onClick={() => {
+                    setIsSignIn(true);
                     setIsModalOpen(true);
                   }}
                 >
@@ -266,7 +271,7 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
 
             {!isHiddenCart && (
               <div
-                className="flex items-center gap-1 cursor-pointer"
+                className="flex items-center gap-1 cursor-pointer mr-3"
                 onClick={() => navigate("/order")}
               >
                 <Badge count={order.orderItems?.length} size="small">
@@ -353,7 +358,14 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
             </div>
             <label className="font-bold py-2">Họ và tên</label>
             <div className="my-2">
-              <input type="text" className="w-full h-8 border rounded"></input>
+              <input
+                type="text"
+                className="w-full h-8 border rounded"
+                value={fullName}
+                onChange={(e) => {
+                  setFullName(e.target.value);
+                }}
+              ></input>
             </div>
             <label className="font-bold py-2">Email</label>
             <div className="my-2">
@@ -382,10 +394,17 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
               <input
                 type="password"
                 className="w-full h-8 border rounded"
+                value={password2}
+                onChange={(e) => {
+                  setPassword2(e.target.value);
+                }}
               ></input>
             </div>
             <div className="mt-4">
-              <button className="w-full rounded bg-green-300 p-2">
+              <button
+                className="w-full rounded bg-green-300 p-2"
+                onClick={handleSignUp}
+              >
                 Đăng ký
               </button>
             </div>

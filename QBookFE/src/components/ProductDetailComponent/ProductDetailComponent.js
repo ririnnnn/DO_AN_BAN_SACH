@@ -37,7 +37,7 @@ const ProductDetailComponent = ({ id }) => {
     };
   }, [order?.isSuccessOrder]);
 
-  const onChangeQuantityProduct = () => {};
+  const onChangeQuantityProduct = (value) => {};
 
   const handleChangeNumberProduct = (type, check) => {
     if (type === "increase") {
@@ -245,9 +245,6 @@ const ProductDetailComponent = ({ id }) => {
           </span>
         </div>
         <div>
-          <span>Mã sách: {product?._id}</span>
-        </div>
-        <div>
           <span>Tác giả: </span>
           {authorBook?.name ? (
             <span
@@ -285,7 +282,7 @@ const ProductDetailComponent = ({ id }) => {
               onClick={() => navigate("/user-detail")}
             >
               {" "}
-              Đổi địa chỉ
+              <span className="text-[#d51c24] font-semibold">Đổi địa chỉ</span>
             </span>
           ) : null}
         </div>
@@ -300,7 +297,7 @@ const ProductDetailComponent = ({ id }) => {
         {product?.countInStock !== 0 ? (
           <div>
             <div>
-              <div>Số Lượng</div>
+              <div>Số Lượng còn: {product.countInStock}</div>
               <div className="mt-3">
                 <Button
                   onClick={() => handleChangeNumberProduct("decrease")}
@@ -308,11 +305,13 @@ const ProductDetailComponent = ({ id }) => {
                 />
                 <InputNumber
                   defaultValue={numberProduct}
-                  onChange={onChangeQuantityProduct}
+                  onChange={(e) => {
+                    if (e != null) setNumberProduct(e);
+                  }}
                   value={numberProduct}
                   min={1}
                   max={product?.countInStock}
-                  className="w-10 mx-1 my-0"
+                  className="w-20 mx-1 my-0"
                 />
                 <Button
                   onClick={() =>

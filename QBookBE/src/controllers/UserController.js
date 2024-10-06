@@ -7,23 +7,25 @@ dotenv.config();
 
 const createUser = async (req, res) => {
   try {
-    const { email, password, confirmPassword } = req.body;
+    const { fullName, email, password, password2 } = req.body;
     const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const isCheckEmail = regex.test(email);
-    if (!email || !password || !confirmPassword) {
+    if (req.body) {
+      console.log(fullName, email, password, password2);
+      console.log(fullName, email, password, password2);
       return res.status(200).json({
         status: "ERROR",
-        message: "The input is required",
+        message: "Missing input field",
       });
     } else if (!isCheckEmail) {
       return res.status(200).json({
         status: "ERROR",
         message: "The input must is email",
       });
-    } else if (password !== confirmPassword) {
+    } else if (password !== password2) {
       return res.status(200).json({
         status: "ERROR",
-        message: "The password is equal confirmPassword",
+        message: "The password has to be the same with confirmPassword",
       });
     }
     const respone = await UserService.createUser(req.body);
@@ -134,7 +136,7 @@ const getAllUser = async (req, res) => {
 const getUserDatail = async (req, res) => {
   try {
     const userId = req.params.id;
-
+    console.log("userID: ", userId);
     if (!userId) {
       res.status(400).json({
         status: "ERROR",

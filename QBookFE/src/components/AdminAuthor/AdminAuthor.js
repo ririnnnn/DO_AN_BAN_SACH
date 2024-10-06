@@ -427,7 +427,6 @@ const AdminAuthor = () => {
             name="bio"
             rules={[
               {
-                required: true,
                 message: "Vui lòng nhập tiểu sử!",
               },
             ]}
@@ -513,7 +512,6 @@ const AdminAuthor = () => {
               name="bio"
               rules={[
                 {
-                  required: true,
                   message: "Vui lòng nhập tiểu sử!",
                 },
               ]}

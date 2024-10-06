@@ -68,12 +68,12 @@ function NewsPage() {
           >
             Tin tức
           </div>
-          <div
+          {/* <div
             className="text-base p-3 cursor-pointer hover:bg-[#189eff] hover:text-white transition"
             onClick={() => navigate("/contact")}
           >
             Liên hệ
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="w-full h-calc-100-minus-80 bg-[#f5f5fa]">
@@ -86,14 +86,14 @@ function NewsPage() {
               {dataNew.map((item, index) => (
                 <div className="rounded-2xl p-6 border-2 border-gray-300 w-[45%] h-[200px]">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
+                    {/* <div className="flex items-center gap-3">
                       <img
                         src="https://files.fullstack.edu.vn/f8-prod/blog_posts/9976/65fa652ce3a64.jpg"
                         alt=""
                         className="rounded-[50%] w-[30px] h-[30px] object-cover"
                       />
                       <span>Admin</span>
-                    </div>
+                    </div> */}
                     {/* <div className="cursor-pointer">
                       <EllipsisOutlined className="text-[20px]" />
                     </div> */}

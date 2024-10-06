@@ -9,6 +9,7 @@ const AuthorRouter = require("./AuthorRouter");
 const NewRouter = require("./NewRouter");
 const BannerRouter = require("./BannerRouter");
 const StatisticRouter = require("./StatisticRouter");
+const VNPayRouter = require("./VNPayRouter");
 
 const routes = (app) => {
   app.use("/api/user", UserRouter);
@@ -22,6 +23,7 @@ const routes = (app) => {
   app.use("/api/new", NewRouter);
   app.use("/api/banner", BannerRouter);
   app.use("/api/statistic", StatisticRouter);
+  app.use("/api/payment", VNPayRouter);
 };
 
 module.exports = routes;

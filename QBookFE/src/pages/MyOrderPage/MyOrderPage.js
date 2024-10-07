@@ -183,10 +183,37 @@ const MyOrderPage = () => {
                 return (
                   <WrapperItemOrder key={item?._id}>
                     <WrapperStatus>
-                      <WrapperStatusTitle>Trạng thái</WrapperStatusTitle>
-                      <WrapperStatusContent>
-                        <span>Mã đơn hàng: </span>
-                        <span>{`DH${item?._id}`}</span>
+                      <div className="flex m-2">
+                        <div className="w-1/2 min-w[300px]">
+                          <span className="text-lg">Mã đơn hàng: </span>
+                          <span className="text-lg text-red-800 font-semibold">{`DH${item?._id}`}</span>
+                        </div>
+                        <div className="w-1/2 min-w[300px]">
+                          <span className="text-lg">Trạng thái </span>
+                          <span className="text-lg  font-semibold">
+                            {item?.isDelivered}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex m-2">
+                        <div className="w-1/2 min-w[300px]">
+                          <span className="text-lg">Ngày đặt: </span>
+                          <span className="text-lg  font-semibold">
+                            {convertDate(item?.createdAt)}
+                          </span>
+                        </div>
+                        <div className="w-1/2 min-w[300px]">
+                          <span className="text-lg">Thanh toán: </span>
+                          <span className="text-lg  font-semibold">
+                            {`${
+                              item?.isPaid ? "Đã thanh toán" : "Chưa thanh toán"
+                            }`}
+                          </span>
+                        </div>
+                      </div>
+                      {/* <WrapperStatusContent>
+                        <span className="text-lg">Mã đơn hàng: </span>
+                        <span className="text-lg">{`DH${item?._id}`}</span>
                       </WrapperStatusContent>
                       <WrapperStatusContent>
                         <span>Giao hàng: </span>
@@ -203,9 +230,9 @@ const MyOrderPage = () => {
                       <WrapperStatusContent>
                         <span>Ngày đặt: </span>
                         <span>{convertDate(item?.createdAt)}</span>
-                      </WrapperStatusContent>
+                      </WrapperStatusContent> */}
                     </WrapperStatus>
-                    {renderOrder(item?.orderItems)}
+                    {/* {renderOrder(item?.orderItems)} */}
                     <WrapperFooterItem>
                       <div>
                         <span

@@ -98,6 +98,29 @@ const getOrderById = (userId, statusDelivery, pageString) => {
       let result = null;
       let totalOrder = null;
       const PAGE_SIZE = 5;
+      if (pageString == "all") {
+        result = await Order.find({
+          user: userId,
+          isDelivered: "Đã giao hàng",
+        }).sort({ createdAt: -1 });
+        totalOrder = await Order.count({
+          user: userId,
+          isDelivered: "Đã giao hàng",
+        });
+        if (result === null) {
+          resolve({
+            status: "ERROR",
+            message: "The user id is not definded!",
+          });
+        } else {
+          resolve({
+            status: "OK",
+            message: "Get orders success!",
+            totalOrder,
+            data: result,
+          });
+        }
+      }
       let page = Number(pageString);
 
       if (page <= 0) page = 1;
@@ -207,28 +230,34 @@ const deleteOrder = (orderId, reqBody) => {
       const { orderItems, email } = reqBody;
 
       const result = orderItems.map(async (order) => {
+        console.log(order.product);
+        console.log("here 1");
         const productData = await Product.findOneAndUpdate(
           {
             _id: order?.product,
-            selled: { $gte: order?.amount },
+            // selled: { $gte: order?.amount },
           },
           { $inc: { countInStock: +order?.amount, selled: -order?.amount } },
           { new: true }
         );
+        console.log("here 2");
+        console.log(productData._id);
         if (productData) {
+          console.log("here 3");
           const orderDelete = await Order.findByIdAndUpdate(
             orderId,
             { isDelivered: "Đã hủy" },
             { new: true }
           );
-
+          console.log("here 4");
           if (orderDelete === null) {
             resolve({
               status: "ERROR",
               message: "The order id is not definded!",
             });
           } else {
-            await EmailService.sendEmailDeleteOrder(email, orderDelete);
+            if (email)
+              await EmailService.sendEmailDeleteOrder(email, orderDelete);
             resolve({
               status: "OK",
               message: "Delete the order successfully!",

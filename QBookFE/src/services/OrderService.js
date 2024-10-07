@@ -29,6 +29,9 @@ export const getOrder = async (id, access_token, delivery, page) => {
   if (delivery === "Đã giao hàng") {
     typeDelivery = "delivered";
   }
+  if (delivery === "Đã hủy") {
+    typeDelivery = "canceled";
+  }
 
   const res = await axiosJWT.get(
     `${process.env.REACT_APP_API}/order/get-order/${id}?delivery=${typeDelivery}&page=${page}`,

@@ -1,4 +1,5 @@
 const ProductService = require("../services/ProductService");
+const OrderService = require("../services/OrderService");
 
 const createProduct = async (req, res) => {
   try {
@@ -195,13 +196,32 @@ const ratingProduct = async (req, res) => {
         message: "Rating must be between 1 and 5!",
       });
     }
-
-    const response = await ProductService.ratingProduct(
-      productId,
+    const userOrder = await OrderService.getOrderById(
       userId,
-      rating
+      "Đã giao hàng",
+      "all"
     );
-    res.status(200).json(response);
+    let checkOrdered = false;
+    for (let i = 0; i < userOrder.data.length; i++) {
+      console.log("here");
+      const check = userOrder.data[i].orderItems.filter((item) => {
+        return item.product == productId;
+      });
+      if (check[0]) checkOrdered = true;
+    }
+    if (checkOrdered) {
+      const response = await ProductService.ratingProduct(
+        productId,
+        userId,
+        rating
+      );
+      res.status(200).json(response);
+    } else {
+      res.status(200).json({
+        status: "ERROR",
+        message: "Bạn phải mua hàng trước khi đánh giá!",
+      });
+    }
   } catch (e) {
     res.status(404).json({
       message: e,

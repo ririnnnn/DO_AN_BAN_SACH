@@ -10,20 +10,18 @@ const createUser = async (req, res) => {
     const { fullName, email, password, password2 } = req.body;
     const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const isCheckEmail = regex.test(email);
-    if (req.body) {
-      console.log(fullName, email, password, password2);
-      console.log(fullName, email, password, password2);
-      return res.status(200).json({
+    if (!fullName || !email || !password || !password2) {
+      return res.status(401).json({
         status: "ERROR",
         message: "Missing input field",
       });
     } else if (!isCheckEmail) {
-      return res.status(200).json({
+      return res.status(401).json({
         status: "ERROR",
         message: "The input must is email",
       });
     } else if (password !== password2) {
-      return res.status(200).json({
+      return res.status(401).json({
         status: "ERROR",
         message: "The password has to be the same with confirmPassword",
       });

@@ -3,223 +3,221 @@ import {
   DeleteOutlined,
   EditOutlined,
   SearchOutlined,
-} from '@ant-design/icons'
-import { Button, Form, Select, Space } from 'antd'
-import { useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
-import * as Message from '../../components/Message/Message'
-import useMutationHook from '../../hooks/useMutationHook'
-import * as UserService from '../../services/UserService'
-import { getBase64 } from '../../utils/utils'
-import DrawerComponent from '../DrawerComponent/DrawerComponent'
-import InputComponent from '../InputComponent/InputComponent'
-import LoadingComponent from '../LoadingComponent/LoadingComponent'
-import ModalComponent from '../ModalComponent/ModalComponent'
-import TableComponent from '../TableComponent/TableComponent'
-import { WrapperButton, WrapperHeader, WrapperUpload } from './styles'
+} from "@ant-design/icons";
+import { Button, Form, Select, Space } from "antd";
+import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import * as Message from "../../components/Message/Message";
+import useMutationHook from "../../hooks/useMutationHook";
+import * as UserService from "../../services/UserService";
+import { getBase64 } from "../../utils/utils";
+import DrawerComponent from "../DrawerComponent/DrawerComponent";
+import InputComponent from "../InputComponent/InputComponent";
+import LoadingComponent from "../LoadingComponent/LoadingComponent";
+import ModalComponent from "../ModalComponent/ModalComponent";
+import TableComponent from "../TableComponent/TableComponent";
+import { WrapperButton, WrapperHeader, WrapperUpload } from "./styles";
 
 const AdminUser = () => {
-  const [isOpenModalCreate, setIsOpenModalCreate] = useState(false)
-  const [isOpenModalEdit, setIsOpenModalEdit] = useState(false)
-  const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
-  const [isRowSelected, setIsRowSelected] = useState('')
-  const [isEmailUser, setIsEmailUser] = useState('')
-  const [searchText, setSearchText] = useState('')
-  const [typeBoolean, setTypeBoolean] = useState(['true', 'false'])
-  const [searchedColumn, setSearchedColumn] = useState('')
-  const [pageValue, setPageValue] = useState(1)
-  const [dataUserAdmin, setDataUserAdmin] = useState([])
-  const [totalUser, setTotalUser] = useState(10)
-  const [isLoadingUser, setIsLoadingUser] = useState(false)
+  const [isOpenModalCreate, setIsOpenModalCreate] = useState(false);
+  const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
+  const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
+  const [isRowSelected, setIsRowSelected] = useState("");
+  const [isEmailUser, setIsEmailUser] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const [typeBoolean, setTypeBoolean] = useState(["true", "false"]);
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const [pageValue, setPageValue] = useState(1);
+  const [dataUserAdmin, setDataUserAdmin] = useState([]);
+  const [totalUser, setTotalUser] = useState(10);
+  const [isLoadingUser, setIsLoadingUser] = useState(false);
 
-  const searchInput = useRef(null)
+  const searchInput = useRef(null);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm()
-    setSearchText(selectedKeys[0])
-    setSearchedColumn(dataIndex)
-  }
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
 
   const handleReset = (clearFilters) => {
-    clearFilters()
-    setSearchText('')
-  }
+    clearFilters();
+    setSearchText("");
+  };
 
-  const user = useSelector((state) => state.user)
+  const user = useSelector((state) => state.user);
 
   const [stateUserDetail, setStateUserDetail] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    address: '',
-    city: '',
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
     isAdmin: false,
-    avatar: '',
-  })
+    avatar: "",
+  });
 
   const [stateUser, setStateUser] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-  })
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-  const [formCreate] = Form.useForm()
-  const [formUpdate] = Form.useForm()
+  const [formCreate] = Form.useForm();
+  const [formUpdate] = Form.useForm();
 
   const mutationCreate = useMutationHook(({ data }) => {
-    const res = UserService.signupUser(data)
-    return res
-  })
+    const res = UserService.signupUser(data);
+    return res;
+  });
 
   const mutationUpdate = useMutationHook(({ id, data, access_token }) => {
-    const res = UserService.updateUser(id, data, access_token)
-    return res
-  })
+    const res = UserService.updateUser(id, data, access_token);
+    return res;
+  });
 
   const mutationDelete = useMutationHook(({ id, access_token }) => {
-    const res = UserService.deleteUser(id, access_token)
-    return res
-  })
+    const res = UserService.deleteUser(id, access_token);
+    return res;
+  });
 
   const mutationDeleteMany = useMutationHook(({ ids, access_token }) => {
-    const res = UserService.deleteManyUser(ids, access_token)
-    return res
-  })
+    const res = UserService.deleteManyUser(ids, access_token);
+    return res;
+  });
 
   const {
     data: dataCreateUser,
     isSuccess: isSuccessCreateUser,
     isLoading: isLoadingCreateUser,
-  } = mutationCreate
+  } = mutationCreate;
 
   const {
     data: dataUpdateUser,
     isSuccess: isSuccessUpdateUser,
     isLoading: isLoadingUpdateUser,
-  } = mutationUpdate
+  } = mutationUpdate;
 
   const {
     data: dataDeleteUser,
     isSuccess: isSuccessDeleteUser,
     isLoading: isLoadingDeleteUser,
-  } = mutationDelete
+  } = mutationDelete;
 
   const {
     data: dataDeleteManyUser,
     isSuccess: isSuccessDeleteManyUser,
     isLoading: isLoadingDeleteManyUser,
-  } = mutationDeleteMany
+  } = mutationDeleteMany;
 
   const getUserAdmin = async () => {
-    setIsLoadingUser(true)
-    const res = await UserService.getUserAdmin(pageValue, 10)
-    setDataUserAdmin(res?.data)
-    setTotalUser(res?.totalUser)
-    setIsLoadingUser(false)
-  }
+    setIsLoadingUser(true);
+    const res = await UserService.getUserAdmin(pageValue, 10);
+    setDataUserAdmin(res?.data);
+    setTotalUser(res?.totalUser);
+    setIsLoadingUser(false);
+  };
 
   useEffect(() => {
-    getUserAdmin()
+    getUserAdmin();
   }, [
     pageValue,
     isSuccessCreateUser,
     isSuccessUpdateUser,
     isSuccessDeleteUser,
     isSuccessDeleteManyUser,
-  ])
+  ]);
 
   const dataUserTable = dataUserAdmin.map((user) => {
     return {
       ...user,
       key: user._id,
-      isAdmin: user.isAdmin ? 'TRUE' : 'FALSE',
-    }
-  })
+      isAdmin: user.isAdmin ? "TRUE" : "FALSE",
+    };
+  });
 
   useEffect(() => {
-    if (isSuccessCreateUser && dataCreateUser?.status === 'OK') {
-      Message.success('Tạo người dùng mới thành công!')
-      formCreate.resetFields()
+    if (isSuccessCreateUser && dataCreateUser?.status === "OK") {
+      Message.success("Tạo người dùng mới thành công!");
+      formCreate.resetFields();
       setStateUser({
-        email: '',
-        password: '',
-        confirmPassword: '',
-      })
-      setIsOpenModalCreate(false)
-    } else if (dataCreateUser?.status === 'ERROR') {
-      Message.error(`${dataCreateUser?.message}`)
-      formCreate.resetFields()
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+      setIsOpenModalCreate(false);
+    } else if (dataCreateUser?.status === "ERROR") {
+      Message.error(`${dataCreateUser?.message}`);
+      formCreate.resetFields();
       setStateUser({
-        email: '',
-        password: '',
-        confirmPassword: '',
-      })
-      setIsOpenModalCreate(false)
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+      setIsOpenModalCreate(false);
     }
-  }, [isSuccessCreateUser])
+  }, [isSuccessCreateUser]);
 
   useEffect(() => {
-    if (isSuccessUpdateUser && dataUpdateUser?.status === 'OK') {
-      Message.success('Cập nhật thông tin người dùng thành công!')
-      setIsOpenModalEdit(false)
-    } else if (dataUpdateUser?.status === 'ERROR') {
-      Message.error('Cập nhật thông tin người dùng thất bại!')
-      setIsOpenModalEdit(false)
+    if (isSuccessUpdateUser && dataUpdateUser?.status === "OK") {
+      Message.success("Cập nhật thông tin người dùng thành công!");
+      setIsOpenModalEdit(false);
+    } else if (dataUpdateUser?.status === "ERROR") {
+      Message.error("Cập nhật thông tin người dùng thất bại!");
+      setIsOpenModalEdit(false);
     }
-  }, [isSuccessUpdateUser])
+  }, [isSuccessUpdateUser]);
 
   useEffect(() => {
-    if (isSuccessDeleteUser && dataDeleteUser?.status === 'OK') {
-      Message.success('Xóa người dùng thành công!')
-      setIsOpenModalDelete(false)
-    } else if (dataDeleteUser?.status === 'ERROR') {
-      Message.success('Xóa người dùng thất bại!')
-      setIsOpenModalDelete(false)
+    if (isSuccessDeleteUser && dataDeleteUser?.status === "OK") {
+      Message.success("Xóa người dùng thành công!");
+      setIsOpenModalDelete(false);
+    } else if (dataDeleteUser?.status === "ERROR") {
+      Message.success("Xóa người dùng thất bại!");
+      setIsOpenModalDelete(false);
     }
-  }, [isSuccessDeleteUser])
+  }, [isSuccessDeleteUser]);
 
   useEffect(() => {
-    if (isSuccessDeleteManyUser && dataDeleteManyUser?.status === 'OK') {
-      Message.success('Xóa nhiều người dùng thành công!')
-    } else if (dataDeleteManyUser?.status === 'ERROR') {
-      Message.success('Xóa nhiều người dùng thất bại!')
+    if (isSuccessDeleteManyUser && dataDeleteManyUser?.status === "OK") {
+      Message.success("Xóa nhiều người dùng thành công!");
+    } else if (dataDeleteManyUser?.status === "ERROR") {
+      Message.success("Xóa nhiều người dùng thất bại!");
     }
-  }, [isSuccessDeleteManyUser])
+  }, [isSuccessDeleteManyUser]);
 
   const handleCancelModalCreate = () => {
-    formCreate.resetFields()
-    setIsOpenModalCreate(false)
-  }
+    formCreate.resetFields();
+    setIsOpenModalCreate(false);
+  };
 
   const handleOnChangeAvatarDetail = async ({ fileList }) => {
-    const file = fileList[0]
+    const file = fileList[0];
     if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj)
+      file.preview = await getBase64(file.originFileObj);
     }
     setStateUserDetail({
       ...stateUserDetail,
       avatar: file.preview,
-    })
-  }
+    });
+  };
 
   const handleOnChange = (e) => {
     setStateUser({
       ...stateUser,
       [e.target.name]: e.target.value,
-    })
-  }
-
-  console.log(dataCreateUser)
+    });
+  };
 
   const handleOnChangeDetail = (e) => {
     setStateUserDetail({
       ...stateUserDetail,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
   const fetchGetDetailUser = async () => {
-    const res = await UserService.getUserDetail(isRowSelected)
+    const res = await UserService.getUserDetail(isRowSelected);
     if (res?.data) {
       setStateUserDetail({
         name: res?.data?.name,
@@ -229,69 +227,69 @@ const AdminUser = () => {
         city: res?.data?.city,
         isAdmin: String(res?.data?.isAdmin),
         avatar: res?.data?.avatar,
-      })
+      });
     }
-  }
+  };
 
   useEffect(() => {
     if (isRowSelected) {
-      fetchGetDetailUser()
+      fetchGetDetailUser();
     }
-  }, [isRowSelected])
+  }, [isRowSelected]);
 
   useEffect(() => {
-    formUpdate.setFieldsValue(stateUserDetail)
-  }, [formUpdate, stateUserDetail])
+    formUpdate.setFieldsValue(stateUserDetail);
+  }, [formUpdate, stateUserDetail]);
 
   const handleGetDetailProduct = () => {
-    setIsOpenModalEdit(true)
-  }
+    setIsOpenModalEdit(true);
+  };
 
   const handleCreateUser = () => {
-    mutationCreate.mutate({ data: stateUser })
-  }
+    mutationCreate.mutate({ data: stateUser });
+  };
 
   const handleUpdateUser = () => {
     mutationUpdate.mutate({
       id: isRowSelected,
       data: stateUserDetail,
       access_token: user?.access_token,
-    })
-  }
+    });
+  };
 
   const handleDelete = () => {
     mutationDelete.mutate({
       id: isRowSelected,
       access_token: user?.access_token,
-    })
-  }
+    });
+  };
 
   const renderIcons = () => {
     return (
       <div>
         <DeleteOutlined
           style={{
-            fontSize: '26px',
-            color: 'red',
-            cursor: 'pointer',
-            marginRight: '10px',
+            fontSize: "26px",
+            color: "red",
+            cursor: "pointer",
+            marginRight: "10px",
           }}
           onClick={() => setIsOpenModalDelete(true)}
         />
         <EditOutlined
-          style={{ fontSize: '26px', color: 'orange', cursor: 'pointer' }}
+          style={{ fontSize: "26px", color: "orange", cursor: "pointer" }}
           onClick={handleGetDetailProduct}
         />
       </div>
-    )
-  }
+    );
+  };
 
   const renderTypeBoolean = () => {
     return typeBoolean.map((type) => ({
       label: type,
       value: type,
-    }))
-  }
+    }));
+  };
 
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
@@ -317,7 +315,7 @@ const AdminUser = () => {
           onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
           style={{
             marginBottom: 8,
-            display: 'block',
+            display: "block",
           }}
         />
         <Space>
@@ -345,7 +343,7 @@ const AdminUser = () => {
             type="link"
             size="small"
             onClick={() => {
-              close()
+              close();
             }}
           >
             close
@@ -356,7 +354,7 @@ const AdminUser = () => {
     filterIcon: (filtered) => (
       <SearchOutlined
         style={{
-          color: filtered ? '#1677ff' : undefined,
+          color: filtered ? "#1677ff" : undefined,
         }}
       />
     ),
@@ -364,78 +362,78 @@ const AdminUser = () => {
       record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownOpenChange: (visible) => {
       if (visible) {
-        setTimeout(() => searchInput.current?.select(), 100)
+        setTimeout(() => searchInput.current?.select(), 100);
       }
     },
-  })
+  });
 
   const columns = [
     {
-      title: 'Tên người dùng',
-      dataIndex: 'name',
+      title: "Tên người dùng",
+      dataIndex: "name",
       sorter: (a, b) => a?.name?.length - b?.name?.length,
-      ...getColumnSearchProps('name'),
+      ...getColumnSearchProps("name"),
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
+      title: "Email",
+      dataIndex: "email",
       sorter: (a, b) => a.email?.length - b.email?.length,
-      ...getColumnSearchProps('email'),
+      ...getColumnSearchProps("email"),
     },
     {
-      title: 'Số điện thoại',
-      dataIndex: 'phone',
+      title: "Số điện thoại",
+      dataIndex: "phone",
     },
     {
-      title: 'Địa chỉ',
-      dataIndex: 'address',
-      ...getColumnSearchProps('address'),
+      title: "Địa chỉ",
+      dataIndex: "address",
+      ...getColumnSearchProps("address"),
     },
     {
-      title: 'Thành phố',
-      dataIndex: 'city',
+      title: "Thành phố",
+      dataIndex: "city",
     },
     {
-      title: 'Admin',
-      dataIndex: 'isAdmin',
+      title: "Admin",
+      dataIndex: "isAdmin",
       filters: [
         {
-          text: 'True',
+          text: "True",
           value: true,
         },
         {
-          text: 'False',
+          text: "False",
           value: false,
         },
       ],
       onFilter: (value, record) => {
         if (value === true) {
-          return record?.isAdmin === 'TRUE'
+          return record?.isAdmin === "TRUE";
         }
-        return record?.isAdmin === 'FALSE'
+        return record?.isAdmin === "FALSE";
       },
     },
     {
-      title: 'Hành động',
-      dataIndex: 'action',
+      title: "Hành động",
+      dataIndex: "action",
       render: renderIcons,
     },
-  ]
+  ];
 
   const handleDeleteManyUser = (ids) => {
-    mutationDeleteMany.mutate({ ids: ids, access_token: user?.access_token })
-  }
+    mutationDeleteMany.mutate({ ids: ids, access_token: user?.access_token });
+  };
 
   const handleOnChangeIsAdmin = (e) => {
     setStateUserDetail({
       ...stateUserDetail,
       isAdmin: e,
-    })
-  }
+    });
+  };
 
   const handleOnChangePage = (page, pageSize) => {
-    setPageValue(page)
-  }
+    setPageValue(page);
+  };
 
   return (
     <div>
@@ -545,7 +543,7 @@ const AdminUser = () => {
       >
         <LoadingComponent isLoading={isLoadingDeleteUser}>
           <div
-            style={{ marginTop: '12px', fontWeight: 600, height: '50px' }}
+            style={{ marginTop: "12px", fontWeight: 600, height: "50px" }}
           >{`Bạn có chắc chắn muốn xóa người dùng có email "${isEmailUser}" này không?`}</div>
         </LoadingComponent>
       </ModalComponent>
@@ -580,8 +578,8 @@ const AdminUser = () => {
               name="name"
               rules={[
                 {
-                  required: true,
-                  message: 'Vui lòng nhập tên người dùng!',
+                  required: false,
+                  message: "Vui lòng nhập tên người dùng!",
                 },
               ]}
             >
@@ -598,7 +596,7 @@ const AdminUser = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Vui lòng nhập email!',
+                  message: "Vui lòng nhập email!",
                 },
               ]}
             >
@@ -614,8 +612,8 @@ const AdminUser = () => {
               name="phone"
               rules={[
                 {
-                  required: true,
-                  message: 'Vui lòng nhập số điện thoại!',
+                  required: false,
+                  message: "Vui lòng nhập số điện thoại!",
                 },
               ]}
             >
@@ -632,8 +630,8 @@ const AdminUser = () => {
               name="address"
               rules={[
                 {
-                  required: true,
-                  message: 'Vui lòng nhập địa chỉ!',
+                  required: false,
+                  message: "Vui lòng nhập địa chỉ!",
                 },
               ]}
             >
@@ -649,8 +647,8 @@ const AdminUser = () => {
               name="city"
               rules={[
                 {
-                  required: true,
-                  message: 'Vui lòng nhập thành phố!',
+                  required: false,
+                  message: "Vui lòng nhập thành phố!",
                 },
               ]}
             >
@@ -667,7 +665,7 @@ const AdminUser = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Vui lòng chọn True hoặc False!',
+                  message: "Vui lòng chọn True hoặc False!",
                 },
               ]}
             >
@@ -676,7 +674,7 @@ const AdminUser = () => {
                 value={stateUserDetail?.isAdmin}
                 onChange={handleOnChangeIsAdmin}
                 style={{
-                  width: '100%',
+                  width: "100%",
                 }}
                 options={renderTypeBoolean()}
               />
@@ -687,14 +685,14 @@ const AdminUser = () => {
               name="avatar"
               rules={[
                 {
-                  required: true,
-                  message: 'Vui lòng chọn hình ảnh!',
+                  required: false,
+                  message: "Vui lòng chọn hình ảnh!",
                 },
               ]}
             >
               <WrapperUpload onChange={handleOnChangeAvatarDetail} maxCount={1}>
                 <Button
-                  className={stateUserDetail.avatar ? 'btn-upload' : null}
+                  className={stateUserDetail.avatar ? "btn-upload" : null}
                 >
                   Upload
                 </Button>
@@ -703,11 +701,11 @@ const AdminUser = () => {
                     src={stateUserDetail.avatar}
                     alt="avatar"
                     style={{
-                      width: '60px',
-                      height: '60px',
-                      borderRadius: '50%',
-                      objectFit: 'cover',
-                      marginLeft: '20px',
+                      width: "60px",
+                      height: "60px",
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                      marginLeft: "20px",
                     }}
                   />
                 )}
@@ -728,7 +726,7 @@ const AdminUser = () => {
         </LoadingComponent>
       </DrawerComponent>
 
-      <div style={{ marginTop: '20px' }}>
+      <div style={{ marginTop: "20px" }}>
         <TableComponent
           isLoading={isLoadingUser}
           columns={columns}
@@ -740,15 +738,15 @@ const AdminUser = () => {
           onRow={(record) => {
             return {
               onClick: (event) => {
-                setIsRowSelected(record._id)
-                setIsEmailUser(record.email)
+                setIsRowSelected(record._id);
+                setIsEmailUser(record.email);
               },
-            }
+            };
           }}
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AdminUser
+export default AdminUser;

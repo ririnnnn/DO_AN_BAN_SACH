@@ -2,7 +2,6 @@ const StatisticService = require("../services/StatisticService");
 
 const getStatistic = async (req, res) => {
   try {
-    console.log("statistic controller");
     const { groupBy, countBy, from, type } = req.query;
     if (!groupBy || !countBy || !from) {
       return res.status(400).json({

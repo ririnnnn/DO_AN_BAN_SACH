@@ -101,7 +101,6 @@ const HomePage = () => {
     setIsLoadingBannerImages(true);
     const res = await BannerService.getBannerDisplay(limit);
     const data = res?.data;
-    console.log(data);
     setBannerImages(data.map((item) => item.image));
     setIsLoadingBannerImages(false);
     // setProductMangaComic(res?.data);

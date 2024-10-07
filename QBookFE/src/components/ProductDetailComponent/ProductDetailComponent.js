@@ -13,6 +13,7 @@ import * as PublisherService from "../../services/PublisherService";
 import { convertPrice, initFacebookSDK } from "../../utils/utils";
 import ButtonComponent from "../ButtonComponent/ButtonComponent";
 import LikeButtonComponent from "../LikeButtonComponent/LikeButtonComponent";
+import ListProducts from "../../pages/HomePage/ListProducts/ListProducts";
 
 const ProductDetailComponent = ({ id }) => {
   const [numberProduct, setNumberProduct] = useState(1);
@@ -20,6 +21,8 @@ const ProductDetailComponent = ({ id }) => {
   const [arrAuthor, setArrAuthor] = useState([]);
   const [ratingValue, setRatingValue] = useState(1);
   const [product, setProduct] = useState([]);
+  const [catProduct, setCatProduct] = useState([]);
+  const [isLoadingCatProduct, setIsLoadingCatProduct] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -111,7 +114,12 @@ const ProductDetailComponent = ({ id }) => {
   };
 
   const mutationRating = useMutationHook(({ productId, userId, rating }) => {
-    const res = ProductService.ratingProduct(productId, userId, rating);
+    const res = ProductService.ratingProduct(
+      productId,
+      userId,
+      rating,
+      user.access_token
+    );
     return res;
   });
 
@@ -124,6 +132,8 @@ const ProductDetailComponent = ({ id }) => {
   useEffect(() => {
     if (dataRating?.status === "OK" && isSuccessRating) {
       Message.success("Đánh giá sản phẩm thành công!");
+    } else if (dataRating?.status === "ERROR" && isSuccessRating) {
+      Message.error(dataRating?.message);
     } else if (isErrorRating) {
       Message.error("Đánh giá sản phẩm thất bại");
     }
@@ -134,7 +144,6 @@ const ProductDetailComponent = ({ id }) => {
       const res = await AuthorService.getAllAuthor();
       setArrAuthor(res.data);
     };
-
     const fetchGetAllPublisher = async () => {
       const res = await PublisherService.getAllPublisher();
       setArrPublisher(res.data);
@@ -146,9 +155,21 @@ const ProductDetailComponent = ({ id }) => {
   }, []);
 
   useEffect(() => {
+    async function getCatProduct(product) {
+      if (!product.genreId) return;
+      setIsLoadingCatProduct(true);
+      console.log(product);
+      const catProduct = await ProductService.getAllProductType(
+        product.genreId,
+        20
+      );
+      setCatProduct(catProduct?.data);
+      setIsLoadingCatProduct(false);
+    }
     const fetchProductDetail = async () => {
       const res = await ProductService.getDetailProduct(id);
       setProduct(res.data);
+      getCatProduct(res.data);
     };
 
     fetchProductDetail();
@@ -397,14 +418,21 @@ const ProductDetailComponent = ({ id }) => {
           />
         </div>
       </div>
-      <div className="w-full mt-5">
+      <div className="w-full mt-5 px-5">
+        <ListProducts
+          products={catProduct}
+          title="SẢN PHẨM CÙNG THỂ LOẠI"
+          isLoading={isLoadingCatProduct}
+        ></ListProducts>
+      </div>
+      {/* <div className="w-full mt-5">
         <h1 className="text-xl font-semibold">Viết bình luận</h1>
         <div className="w-[1270px]">
           <FacebookProvider appId="1473682613178203">
             <Comments href={`www.facebook.com/post/${id}`} />
           </FacebookProvider>
         </div>
-      </div>
+      </div> */}
     </Row>
   );
 };

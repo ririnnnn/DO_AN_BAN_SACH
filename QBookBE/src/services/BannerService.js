@@ -4,14 +4,12 @@ const createBanner = (dataBody) => {
   return new Promise(async (resolve, reject) => {
     const { desc, activeFrom, activeTo, image } = dataBody;
     try {
-      console.log(desc, activeFrom, activeTo);
       const createBannerBanner = await Banner.create({
         desc,
         activeFrom,
         activeTo,
         image,
       });
-      console.log("controller");
       if (createBannerBanner) {
         resolve({
           status: "OK",
@@ -20,7 +18,6 @@ const createBanner = (dataBody) => {
         });
       }
     } catch (e) {
-      console.log(e);
       reject(e);
     }
   });
@@ -30,7 +27,6 @@ const getBannerDisplay = (limit) => {
   return new Promise(async (resolve, reject) => {
     try {
       const today = new Date();
-      console.log("test_asdasda", today);
       const result = await Banner.find({
         activeFrom: { $lte: today },
         activeTo: { $gte: today },

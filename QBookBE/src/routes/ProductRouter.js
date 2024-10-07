@@ -33,6 +33,8 @@ router
   .put(authMiddleware, ProductController.updateProduct)
   .delete(authMiddleware, ProductController.deleteProduct);
 
-router.route("/:id/rate").post(ProductController.ratingProduct);
+router
+  .route("/:id/rate")
+  .post(authUserMiddleware, ProductController.ratingProduct);
 
 module.exports = router;

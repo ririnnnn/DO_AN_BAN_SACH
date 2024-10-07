@@ -16,6 +16,7 @@ import useMutationHook from "../../hooks/useMutationHook";
 import * as Message from "../../components/Message/Message";
 import jwt_decode from "jwt-decode";
 import { updateUser } from "../../redux/slides/userSlice";
+
 const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
   const navigate = useNavigate();
 
@@ -193,18 +194,23 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
     }
   }, [data?.status]);
   // sign up modal
-  const singupMutation = useMutationHook((data) => {
-    console.log(data);
-    UserService.signupUser(data);
-  });
-  const { singupData, singupIsLoading, isSuccess, isError } = singupMutation;
+  const singupMutation = useMutationHook((data) =>
+    UserService.signupUser(data)
+  );
+  const {
+    data: singupData,
+    isSuccess: isSignUpSuccess,
+    isError: isSignUpError,
+  } = singupMutation;
   useEffect(() => {
-    if (isSuccess && data?.status === "OK") {
+    if (!singupData) return;
+    if (isSignUpSuccess && singupData?.status === "OK") {
       Message.success("Đăng ký tài khoản thành công!");
-    } else if (isError) {
-      Message.error(data?.message);
+      setIsSignIn(true);
+    } else if (singupData?.status != "OK" && !isSignUpError) {
+      Message.error(singupData?.message);
     }
-  }, [isSuccess]);
+  }, [isSignUpSuccess]);
   const handleSignUp = () => {
     singupMutation.mutate({ fullName, email, password, password2 });
   };
@@ -336,12 +342,12 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
                 Đăng nhập
               </button>
             </div>
-            <div className="text-center font-bold p-2">
+            {/* <div className="text-center font-bold p-2">
               ------------ Đăng nhập bằng Google ------------
             </div>
             <div className="flex justify-center items-center">
               <GoogleLogin></GoogleLogin>
-            </div>
+            </div> */}
           </>
         ) : (
           <>

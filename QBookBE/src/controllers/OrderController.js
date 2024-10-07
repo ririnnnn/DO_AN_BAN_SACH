@@ -175,7 +175,6 @@ const getOrder = async (req, res) => {
     );
     return res.status(200).json(order);
   } catch (e) {
-    console.log(e);
     return res.status(404).json({
       message: e,
     });

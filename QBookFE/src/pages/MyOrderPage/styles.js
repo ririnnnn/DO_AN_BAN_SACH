@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const WrapperMyOrderPage = styled.div`
   width: 1285px;
-  height: auto;
+  height: fit-content;
   margin: 0 auto;
 `;
 
@@ -42,7 +42,7 @@ export const WrapperStyleHeaderDilivery = styled.div`
 
 export const WrapperContainer = styled.div`
   width: 100%;
-  height: calc(100vh - 90px);
+  height: fit-content;
   background-color: #f5f5fa;
 `;
 

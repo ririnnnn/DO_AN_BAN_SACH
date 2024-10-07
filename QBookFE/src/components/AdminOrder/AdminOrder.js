@@ -360,7 +360,6 @@ const AdminOrder = () => {
                   order,
                   user?.access_token
                 );
-                console.log(result);
                 getOrderAdmin();
                 setIsShowModal(false);
               }}
@@ -402,7 +401,6 @@ const AdminOrder = () => {
                   order,
                   user?.access_token
                 );
-                console.log(result);
                 getOrderAdmin();
                 setIsShowModal(false);
               }}
@@ -562,7 +560,7 @@ const AdminOrder = () => {
               handleChangeStatus(record._id, "Giao hàng không thành công");
             }}
           >
-            <i class="fa-solid fa-circle-exclamation"></i>
+            <i className="fa-solid fa-circle-exclamation"></i>
           </button>
           <button
             className="w-8 h-8 mr-1 rounded border-red-500 border-2 font-semibold text-red-500"

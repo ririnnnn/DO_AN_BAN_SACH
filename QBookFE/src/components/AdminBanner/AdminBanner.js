@@ -487,19 +487,19 @@ const AdminBanner = () => {
               form={formUpdate}
             >
               <Form.Item
-                label="Tiêu đề banner"
-                name="title"
+                label="Mô tả banner"
+                name="desc"
                 rules={[
                   {
                     required: true,
-                    message: "Vui lòng nhập tiêu đề banner!",
+                    message: "Vui lòng nhập mô tả banner!",
                   },
                 ]}
               >
                 <InputComponent
-                  value={stateDetailBanner.title}
-                  onChange={handleOnChangeDetail}
-                  name="title"
+                  value={stateBanner.title}
+                  onChange={handleOnChange}
+                  name="desc"
                 />
               </Form.Item>
 
@@ -539,31 +539,39 @@ const AdminBanner = () => {
               </Form.Item>
 
               <Form.Item
-                label="Nội dung banner"
-                name="ckeditor"
+                label="Ngày hoạt động từ"
+                name="activeFrom"
                 rules={[
                   {
                     required: true,
-                    message: "Vui lòng nhập nội dung banner!",
+                    message: "Vui lòng nhập ngày banner hoạt động từ!",
                   },
                 ]}
               >
-                <CKEditor
-                  editor={ClassicEditor}
-                  data={stateDetailBanner.ckeditor}
-                  onReady={(editor) => {
-                    // console.log("Editor is ready to use!", editor);
-                  }}
-                  onChange={(event, editor) => {
-                    const data = editor.getData();
-                    setStateDetailBanner((prevState) => ({
-                      ...prevState,
-                      ckeditor: data,
-                    }));
-                  }}
+                <InputComponent
+                  value={stateDetailBanner.activeFrom}
+                  onChange={handleOnChange}
+                  name="activeFrom"
+                  type={"date"}
                 />
               </Form.Item>
-
+              <Form.Item
+                label="Ngày hoạt động tới"
+                name="activeTo"
+                rules={[
+                  {
+                    required: true,
+                    message: "Vui lòng nhập ngày banner hoạt động tới!",
+                  },
+                ]}
+              >
+                <InputComponent
+                  value={stateDetailBanner.activeTo}
+                  onChange={handleOnChange}
+                  name="activeTo"
+                  type={"date"}
+                />
+              </Form.Item>
               <Form.Item
                 wrapperCol={{
                   offset: 22,

@@ -57,7 +57,6 @@ router.post(
     var orderId = formatTimeToHHMMSS(date);
     date.setMinutes(date.getMinutes() + 30);
     var expireDate = formatDateToYYYYMMDDHHMMSS(date);
-    console.log(createDate, orderId, expireDate);
     var amount = req.body.amount;
     var bankCode = req.body.bankCode;
 
@@ -88,17 +87,13 @@ router.post(
     }
 
     vnp_Params = sortObject(vnp_Params);
-    console.log(vnp_Params);
-
     var querystring = require("qs");
     var signData = querystring.stringify(vnp_Params, { encode: false });
-    console.log("signData", signData);
     var crypto = require("crypto");
     var hmac = crypto.createHmac("sha512", secretKey);
     var signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
     vnp_Params["vnp_SecureHash"] = signed;
     vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
-    console.log(vnpUrl);
     res.status(200).json({ url: vnpUrl });
   },
   authUserMiddleware
@@ -129,8 +124,6 @@ router.get("/vnpay_ipn", async function (req, res, next) {
     const orderDetail = await OrderService.getOrderDetail(
       vnp_Params["vnp_OrderInfo"]
     );
-    console.log("returned order");
-    console.log(orderDetail._id);
     orderDetail.isPaid = true;
     const updateOrderRes = await OrderService.updateOrder(
       vnp_Params["vnp_OrderInfo"],
@@ -170,19 +163,32 @@ router.get("/vnpay_return", async function (req, res, next) {
     const orderDetail = await OrderService.getOrderDetail(
       vnp_Params["vnp_OrderInfo"]
     );
-    console.log("returned order");
-    console.log(orderDetail._id);
-    orderDetail.isPaid = true;
-    const updateOrderRes = await OrderService.updateOrder(
-      vnp_Params["vnp_OrderInfo"],
-      orderDetail
-    );
-    if (updateOrderRes.ok) {
-      res.redirect(
-        "http://localhost:3000/order-detail/" + vnp_Params["vnp_OrderInfo"]
+    if (vnp_Params["vnp_ResponseCode"] == "00") {
+      orderDetail.data.isPaid = true;
+
+      const updateOrderRes = await OrderService.updateOrder(
+        vnp_Params["vnp_OrderInfo"],
+        orderDetail.data
       );
+      console.log("updated ", updateOrderRes);
+      if (updateOrderRes.status == "OK") {
+        res.redirect(
+          "http://localhost:3000/order-detail/" + vnp_Params["vnp_OrderInfo"]
+        );
+      } else {
+        const deleteresult = await OrderService.deleteOrder(
+          vnp_Params["vnp_OrderInfo"],
+          orderDetail.data
+        );
+        res.redirect("http://localhost:3000/order");
+      }
     } else {
-      await OrderService.deleteOrder(vnp_Params["vnp_OrderInfo"], orderDetail);
+      console.log("here 1");
+      const deleteresultawait = await OrderService.deleteOrder(
+        vnp_Params["vnp_OrderInfo"],
+        orderDetail.data
+      );
+      console.log("here 2");
       res.redirect("http://localhost:3000/order");
     }
   } else {

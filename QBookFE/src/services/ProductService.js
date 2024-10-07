@@ -1,5 +1,6 @@
 import axios from "axios";
 import { axiosJWT } from "./UserService";
+import authorizedAxiosInstance from "../utils/authorizedAxios";
 
 export const getAllProduct = async (limit, search) => {
   if (search) {
@@ -135,10 +136,20 @@ export const getBestSeller = async (page, limit) => {
   return res.data;
 };
 
-export const ratingProduct = async (productId, userId, rating) => {
-  const res = await axios.post(
+export const ratingProduct = async (
+  productId,
+  userId,
+  rating,
+  access_token
+) => {
+  const res = await axiosJWT.post(
     `${process.env.REACT_APP_API}/product/${productId}/rate`,
-    { userId, rating }
+    { userId, rating },
+    {
+      headers: {
+        token: `Bearer ${access_token}`,
+      },
+    }
   );
   return res.data;
 };

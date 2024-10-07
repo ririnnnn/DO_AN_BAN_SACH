@@ -26,7 +26,7 @@ const OrderDetailPage = () => {
   const params = useParams();
   const { id } = params;
   const location = useLocation();
-  const { token } = location.state;
+  const { token } = localStorage.getItem("access_token");
 
   const fetchOrderDetail = async () => {
     const res = await OrderService.getOrderDetail(id, token);

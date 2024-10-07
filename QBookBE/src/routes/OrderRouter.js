@@ -8,11 +8,7 @@ const {
 
 router.post("/delete-many", authMiddleware, OrderController.deleteManyOrder);
 router.get("/get-order/:id", authUserMiddleware, OrderController.getOrderById);
-router.get(
-  "/get-order-detail/:id",
-  authUserMiddleware,
-  OrderController.getOrderDetail
-);
+router.get("/get-order-detail/:id", OrderController.getOrderDetail);
 router.get("/get-all-order", authMiddleware, OrderController.getAllOrder);
 router.get("/get-count-order", authMiddleware, OrderController.getCountOrder);
 router.get("/get-total-price", authMiddleware, OrderController.getTotalPrice);
